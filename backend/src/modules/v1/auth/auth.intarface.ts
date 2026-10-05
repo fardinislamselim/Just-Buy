@@ -34,12 +34,17 @@ export interface IRegisterRequest {
 
 
 // Login Request Interface
-
 export interface ILoginRequest {
   email: string;
   password: string;
 }
 
+// Refresh Token Request Interface
+export interface IRefreshTokenRequest {
+  refreshToken: string;
+}
+
+// Auth Response Interface
 export interface AuthResponse {
   user: {
     fullName: string;

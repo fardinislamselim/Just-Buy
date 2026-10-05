@@ -44,6 +44,26 @@ router.post(
 );
 
 /**
+ * Logout
+ *
+ * GET /api/v1/auth/logout
+ */
+router.get(
+  "/logout",
+  authController.logout,
+);
+
+/**
+ * Refresh Token
+ *
+ * POST /api/v1/auth/refresh-token
+ */
+router.post(
+  "/refresh-token",
+  authController.refreshToken,
+);
+
+/**
  * Module Export
  */
 export const AuthRoutes = router;

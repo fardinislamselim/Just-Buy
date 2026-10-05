@@ -1,3 +1,4 @@
+import { refreshTokenSchema } from "./auth.validation";
 /**
  * @copyright 2026
  * @author Fardin Islam Selim - MERN Stack Developer
@@ -114,7 +115,83 @@ const login = async (req: Request, res: Response) => {
   });
 };
 
+/**
+ * Logout Controller
+ * @param {Request} req
+ * @param {Response} res
+ */
+const logout = async (req: Request, res: Response) => {
+  // Clear access token cookie
+  res.clearCookie("accessToken");
+
+  // Clear refresh token cookie
+  res.clearCookie("refreshToken");
+
+  // Log the user logout
+  logger.info("User Logout Successfully");
+
+  // Send response
+  sendResponse(res, {
+    statusCode: HTTP_STATUS.OK,
+    success: true,
+    message: API_MESSAGES.LOGOUT_SUCCESS,
+  });
+};
+
+/**
+ * Refresh Token Controller
+ * @param {Request} req
+ * @param {Response} res
+ */
+const refreshToken = async (req: Request, res: Response) => {
+  // Get refresh token from cookies
+ 
+
+  // Refresh the token
+  const result = await authService.refreshToken(req);
+
+  // Log the user refresh token
+  logger.info("User Refresh Token Successfully", {
+    user: {
+      fullName: result.user.fullName,
+      email: result.user.email,
+      role: result.user.role,
+    },
+  });
+
+  // Set access token in cookie
+  res.cookie("accessToken", result.accessToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV !== "development",
+    sameSite: config.NODE_ENV === "development" ? "lax" : "strict",
+    maxAge: 60 * 60 * 1000, // 1 hour
+  });
+
+  // Set refresh token in cookie
+  res.cookie("refreshToken", result.refreshToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV !== "development",
+    sameSite: config.NODE_ENV === "development" ? "lax" : "strict",
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  });
+
+  sendResponse(res, {
+    statusCode: HTTP_STATUS.OK,
+    success: true,
+    message: API_MESSAGES.TOKEN_REFRESH_SUCCESS,
+    data: {
+      user: {
+        fullName: result.user.fullName,
+        email: result.user.email,
+        role: result.user.role,
+      },
+    },
+  });
+};
+
 export const authController = {
   register,
   login,
+  logout,
+  refreshToken,
 };

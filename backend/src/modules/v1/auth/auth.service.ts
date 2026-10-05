@@ -14,7 +14,11 @@ import bcrypt from "bcrypt";
  */
 import AppError from "@/utils/appError";
 import { API_MESSAGES, ERROR_CODE, HTTP_STATUS } from "@/utils/constants";
-import { generateAccessToken, generateRefreshToken } from "@/utils/jwt";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from "@/utils/jwt";
 
 /**
  * Models
@@ -31,6 +35,7 @@ import type {
   ILoginRequest,
   IRegisterRequest,
 } from "@/modules/v1/auth/auth.intarface";
+import type { Request } from "express";
 
 /**
  * Register Service
@@ -117,7 +122,10 @@ const login = async (payload: ILoginRequest): Promise<AuthResponse> => {
   }
 
   // Check password
-  const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+  const isPasswordValid = await bcrypt.compare(
+    password,
+    existingUser?.password,
+  );
 
   if (!isPasswordValid) {
     throw new AppError(
@@ -143,7 +151,62 @@ const login = async (payload: ILoginRequest): Promise<AuthResponse> => {
   };
 };
 
+/**
+ * Refresh Token Service
+ * @param { string } payload
+ * @returns { Promise<AuthResponse> }
+ */
+const refreshToken = async (req: Request): Promise<AuthResponse> => {
+  const refreshToken = req.cookies.refreshToken;
+
+ 
+
+  if (!refreshToken) {
+    throw new AppError(
+      HTTP_STATUS.UNAUTHORIZED,
+      ERROR_CODE.AUTH_REFRESH_TOKEN_MISSING,
+      API_MESSAGES.REFRESH_TOKEN_MISSING,
+    );
+  }
+
+  const decoded = verifyRefreshToken(refreshToken);
+
+   console.log("this is from service", decoded);
+
+  if (!decoded) {
+    throw new AppError(
+      HTTP_STATUS.UNAUTHORIZED,
+      ERROR_CODE.AUTH_REFRESH_TOKEN_INVALID,
+      API_MESSAGES.REFRESH_TOKEN_INVALID,
+    );
+  }
+
+  const user = await User.findById(decoded.userId);
+
+  if (!user) {
+    throw new AppError(
+      HTTP_STATUS.NOT_FOUND,
+      ERROR_CODE.AUTH_ACCOUNT_NOT_FOUND,
+      API_MESSAGES.ACCOUNT_NOT_FOUND,
+    );
+  }
+
+  const accessToken = generateAccessToken(user._id);
+  const newRefreshToken = generateRefreshToken(user._id);
+
+  return {
+    user: {
+      fullName: user.fullName,
+      email: user.email,
+      role: user.role,
+    },
+    accessToken,
+    refreshToken: newRefreshToken,
+  };
+};
+
 export const authService = {
   register,
   login,
+  refreshToken,
 };
