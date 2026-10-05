@@ -1,4 +1,3 @@
-import { refreshTokenSchema } from "./auth.validation";
 /**
  * @copyright 2026
  * @author Fardin Islam Selim - MERN Stack Developer
@@ -15,6 +14,7 @@ import { Request, Response } from "express";
  */
 import config from "@/config";
 import { logger } from "@/lib/winston";
+import asyncHandler from "@/utils/asyncHandler";
 import { API_MESSAGES, HTTP_STATUS } from "@/utils/constants";
 import sendResponse from "@/utils/sendResponse";
 import { authService } from "./auth.service";
@@ -24,7 +24,7 @@ import { authService } from "./auth.service";
  * @param {Request} req
  * @param {Response} res
  */
-const register = async (req: Request, res: Response) => {
+const register = asyncHandler(async (req: Request, res: Response) => {
   const body = req.body;
   const result = await authService.register(body);
 
@@ -65,14 +65,14 @@ const register = async (req: Request, res: Response) => {
       },
     },
   });
-};
+});
 
 /**
  * Login Controller
  * @param {Request} req
  * @param {Response} res
  */
-const login = async (req: Request, res: Response) => {
+const login = asyncHandler(async (req: Request, res: Response) => {
   const body = req.body;
   const result = await authService.login(body);
 
@@ -113,14 +113,14 @@ const login = async (req: Request, res: Response) => {
       },
     },
   });
-};
+});
 
 /**
  * Logout Controller
  * @param {Request} req
  * @param {Response} res
  */
-const logout = async (req: Request, res: Response) => {
+const logout = asyncHandler(async (req: Request, res: Response) => {
   // Clear access token cookie
   res.clearCookie("accessToken");
 
@@ -136,16 +136,14 @@ const logout = async (req: Request, res: Response) => {
     success: true,
     message: API_MESSAGES.LOGOUT_SUCCESS,
   });
-};
+});
 
 /**
  * Refresh Token Controller
  * @param {Request} req
  * @param {Response} res
  */
-const refreshToken = async (req: Request, res: Response) => {
-  // Get refresh token from cookies
- 
+const refreshToken = asyncHandler(async (req: Request, res: Response) => {
 
   // Refresh the token
   const result = await authService.refreshToken(req);
@@ -187,7 +185,7 @@ const refreshToken = async (req: Request, res: Response) => {
       },
     },
   });
-};
+});
 
 export const authController = {
   register,
