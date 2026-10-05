@@ -60,13 +60,61 @@ const register = async (req: Request, res: Response) => {
       user: {
         fullName: result.user.fullName,
         email: result.user.email,
-        role: result.user.role
+        role: result.user.role,
       },
-    
+    },
+  });
+};
+
+/**
+ * Login Controller
+ * @param {Request} req
+ * @param {Response} res
+ */
+const login = async (req: Request, res: Response) => {
+  const body = req.body;
+  const result = await authService.login(body);
+
+  // Log the user login
+  logger.info("User Login Successfully", {
+    user: {
+      fullName: result.user.fullName,
+      email: result.user.email,
+      role: result.user.role,
+    },
+  });
+
+  // Set access token in cookie
+  res.cookie("accessToken", result.accessToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV !== "development",
+    sameSite: config.NODE_ENV === "development" ? "lax" : "strict",
+    maxAge: 60 * 60 * 1000, // 1 hour
+  });
+
+  // Set refresh token in cookie
+  res.cookie("refreshToken", result.refreshToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV !== "development",
+    sameSite: config.NODE_ENV === "development" ? "lax" : "strict",
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  });
+
+  sendResponse(res, {
+    statusCode: HTTP_STATUS.OK,
+    success: true,
+    message: `${result.user.role === "seller" ? API_MESSAGES.SELLER_LOGIN_SUCCESS : API_MESSAGES.BUYER_LOGIN_SUCCESS} `,
+    data: {
+      user: {
+        fullName: result.user.fullName,
+        email: result.user.email,
+        role: result.user.role,
+      },
     },
   });
 };
 
 export const authController = {
   register,
+  login,
 };

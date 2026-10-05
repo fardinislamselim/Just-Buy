@@ -160,6 +160,7 @@ export const API_MESSAGES = {
   REFRESH_TOKEN_EXPIRED: "Refresh token has expired",
 
   // Token
+  TOKEN_REFRESH_SUCCESS: "Authentication token refreshed successfully",
   TOKEN_REFRESH_FAILED: "Failed to refresh authentication token",
 
   // User
@@ -168,18 +169,48 @@ export const API_MESSAGES = {
   USER_DELETED: "User deleted successfully",
   USER_NOT_FOUND: "User not found",
 
+  // Buyer Authentication
+  BUYER_SIGNUP_SUCCESS: "Buyer signup successful",
+  BUYER_LOGIN_SUCCESS: "Buyer login successful",
+  BUYER_LOGOUT_SUCCESS: "Buyer logout successful",
+
   // Buyer Profile
   BUYER_PROFILE_CREATED: "Buyer profile created successfully",
   BUYER_PROFILE_UPDATED: "Buyer profile updated successfully",
   BUYER_PROFILE_DELETED: "Buyer profile deleted successfully",
   BUYER_PROFILE_NOT_FOUND: "Buyer profile not found",
+  BUYER_PROFILE_ALREADY_EXISTS: "Buyer profile already exists",
+
+  // Seller Authentication
+  SELLER_SIGNUP_SUCCESS: "Seller signup successful",
+  SELLER_LOGIN_SUCCESS: "Seller login successful",
+  SELLER_LOGOUT_SUCCESS: "Seller logout successful",
 
   // Seller Profile
   SELLER_PROFILE_CREATED: "Seller profile created successfully",
   SELLER_PROFILE_UPDATED: "Seller profile updated successfully",
   SELLER_PROFILE_DELETED: "Seller profile deleted successfully",
   SELLER_PROFILE_NOT_FOUND: "Seller profile not found",
+  SELLER_PROFILE_ALREADY_EXISTS: "Seller profile already exists",
+
   SELLER_NOT_APPROVED: "Seller account is not approved",
+  SELLER_VERIFICATION_PENDING: "Seller verification is pending",
+  SELLER_VERIFIED: "Seller account has been verified",
+  SELLER_REJECTED: "Seller account has been rejected",
+
+  // Password
+  PASSWORD_CHANGED: "Password changed successfully",
+  PASSWORD_CHANGE_FAILED: "Failed to change password",
+  CURRENT_PASSWORD_INCORRECT: "Current password is incorrect",
+
+  // Forgot Password
+  PASSWORD_RESET_OTP_SENT: "Password reset OTP sent successfully",
+  PASSWORD_RESET_OTP_VERIFIED: "Password reset OTP verified successfully",
+  PASSWORD_RESET_SUCCESS: "Password reset successfully",
+  PASSWORD_RESET_OTP_INVALID: "Invalid password reset OTP",
+  PASSWORD_RESET_OTP_EXPIRED: "Password reset OTP has expired",
+  PASSWORD_RESET_TOKEN_INVALID: "Invalid password reset token",
+  PASSWORD_RESET_TOKEN_EXPIRED: "Password reset token has expired",
 
   // Product
   PRODUCT_CREATED: "Product created successfully",
@@ -201,7 +232,6 @@ export const API_MESSAGES = {
   CART_UPDATED: "Cart updated successfully",
   CART_DELETED: "Cart deleted successfully",
   CART_NOT_FOUND: "Cart not found",
-
   CART_ITEM_ADDED: "Item added to cart successfully",
   CART_ITEM_UPDATED: "Cart item updated successfully",
   CART_ITEM_REMOVED: "Item removed from cart successfully",
@@ -213,7 +243,6 @@ export const API_MESSAGES = {
   WISHLIST_UPDATED: "Wishlist updated successfully",
   WISHLIST_DELETED: "Wishlist deleted successfully",
   WISHLIST_NOT_FOUND: "Wishlist not found",
-
   WISHLIST_ITEM_ADDED: "Item added to wishlist successfully",
   WISHLIST_ITEM_REMOVED: "Item removed from wishlist successfully",
   WISHLIST_ITEM_NOT_FOUND: "Wishlist item not found",

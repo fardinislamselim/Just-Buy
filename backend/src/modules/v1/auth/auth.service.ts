@@ -28,6 +28,7 @@ import { SellerProfile } from "@/modules/v1/seller/seller.mode";
  */
 import type {
   AuthResponse,
+  ILoginRequest,
   IRegisterRequest,
 } from "@/modules/v1/auth/auth.intarface";
 
@@ -93,6 +94,56 @@ const register = async (payload: IRegisterRequest): Promise<AuthResponse> => {
   };
 };
 
+/**
+ * Login Service
+ * @param { ILoginRequest } payload
+ * @returns { Promise<AuthResponse> }
+ */
+const login = async (payload: ILoginRequest): Promise<AuthResponse> => {
+  // Destructure the all payload
+  const { email, password } = payload;
+
+  // Check existing user
+  const existingUser = await User.findOne({
+    email,
+  });
+
+  if (!existingUser) {
+    throw new AppError(
+      HTTP_STATUS.NOT_FOUND,
+      ERROR_CODE.AUTH_ACCOUNT_NOT_FOUND,
+      API_MESSAGES.ACCOUNT_NOT_FOUND,
+    );
+  }
+
+  // Check password
+  const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+
+  if (!isPasswordValid) {
+    throw new AppError(
+      HTTP_STATUS.UNAUTHORIZED,
+      ERROR_CODE.AUTH_INVALID_CREDENTIALS,
+      API_MESSAGES.INVALID_CREDENTIALS,
+    );
+  }
+
+  // Create Token
+  const accessToken = generateAccessToken(existingUser._id);
+  const refreshToken = generateRefreshToken(existingUser._id);
+
+  // Return the user, access & and refresh token
+  return {
+    user: {
+      fullName: existingUser.fullName,
+      email: existingUser.email,
+      role: existingUser.role,
+    },
+    accessToken,
+    refreshToken,
+  };
+};
+
 export const authService = {
   register,
+  login,
 };

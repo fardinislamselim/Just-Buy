@@ -13,6 +13,7 @@ import { Router } from "express";
  * Application Modules
  */
 import {
+  loginSchema,
   registerSchema,
 } from "./auth.validation";
 import { validate } from "@/middlewares/zod.middleware";
@@ -31,6 +32,16 @@ router.post(
   authController.register,
 );
 
+/**
+ * Login
+ *
+ * POST /api/v1/auth/login
+ */
+router.post(
+  "/login",
+  validate(loginSchema),
+  authController.login,
+);
 
 /**
  * Module Export

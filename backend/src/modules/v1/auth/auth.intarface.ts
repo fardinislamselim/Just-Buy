@@ -4,18 +4,17 @@
  * @license Apache-2.0
  */
 
-/**
- * User Roles
- */
+
+// User Roles
+
 export enum UserRole {
   BUYER = "buyer",
   SELLER = "seller",
   ADMIN = "admin",
 }
 
-/**
- * User Interface
- */
+// User Interface
+
 export interface IUser {
   fullName: string;
   email: string;
@@ -24,14 +23,21 @@ export interface IUser {
   is_active: boolean;
 }
 
-/**
- * Register Request Interface
- */
+// Register Request Interface
+
 export interface IRegisterRequest {
   fullName: string;
   email: string;
   password: string;
   role: UserRole.BUYER | UserRole.SELLER | UserRole.ADMIN;
+}
+
+
+// Login Request Interface
+
+export interface ILoginRequest {
+  email: string;
+  password: string;
 }
 
 export interface AuthResponse {
