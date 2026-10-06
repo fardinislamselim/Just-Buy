@@ -5,75 +5,75 @@
  */
 
 /**
- * Third-Party Modules
+ * Third-Party Module
  */
 import { Router } from "express";
 
 /**
- * Application Modules
+ * Middlewares
+ */
+import authenticate from "@/middlewares/authenticate";
+import validation from "@/middlewares/validation";
+
+/**
+ * API Controllers
  */
 import {
-  loginSchema,
-  registerSchema,
-} from "./auth.validation";
-import { validate } from "@/middlewares/zod.middleware";
-import { authController } from "@/modules/v1/auth/auth.controller";
+  forgotPasswordController,
+  loginController,
+  logoutController,
+  refreshTokenController,
+  registerController,
+} from "@/modules/v1/auth/auth.controller";
 
+/**
+ * Validations
+ */
+import { loginSchema, registerSchema } from "@/modules/v1/auth/auth.validation";
+
+/**
+ * Router Instance
+ */
 const router = Router();
 
 /**
- * Register
- *
- * POST /api/v1/auth/register
+ * User Registration Route
+ * @access - public
+ * @method - POST
+ * @route - /api/v1/auth/register
  */
-router.post(
-  "/register",
-  validate(registerSchema),
-  authController.register,
-);
+router.post("/register", validation(registerSchema), registerController);
 
 /**
- * Login
- *
- * POST /api/v1/auth/login
+ * User Login Route
+ * @access - public
+ * @method - POST
+ * @route - /api/v1/auth/login
  */
-router.post(
-  "/login",
-  validate(loginSchema),
-  authController.login,
-);
+router.post("/login", validation(loginSchema), loginController);
 
 /**
- * Logout
- *
- * GET /api/v1/auth/logout
+ * User Logout Route
+ * @access - public
+ * @method - GET
+ * @route - /api/v1/auth/logout
  */
-router.get(
-  "/logout",
-  authController.logout,
-);
+router.get("/logout", authenticate, logoutController);
 
 /**
- * Refresh Token
- *
- * POST /api/v1/auth/refresh-token
+ * Refresh Token Route
+ * @access - public
+ * @method - POST
+ * @route - /api/v1/auth/refresh-token
  */
-router.post(
-  "/refresh-token",
-  authController.refreshToken,
-);
+router.post("/refresh-token", refreshTokenController);
 
 /**
- * Forgot Password
- *
- * POST /api/v1/auth/forgot-password
+ * Forgot Password Route
+ * @access - public
+ * @method - POST
+ * @route - /api/v1/auth/forgot-password
  */
-router.post(
-  "/forgot-password",
-  authController.forgotPassword,
-);
+router.post("/forgot-password", forgotPasswordController);
 
-/**
- * Module Export
- */
-export const AuthRoutes = router;
+export default router;

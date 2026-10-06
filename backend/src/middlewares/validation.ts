@@ -1,31 +1,25 @@
 /**
  * @copyright 2026
  * @author Fardin Islam Selim - MERN Stack Developer
- * @description Zod Middleware
+ * @license Apache-2.0
  */
 
 /**
- * Third-Party Modules
+ * Third-Party Module
  */
-import type {
-  NextFunction,
-  Request,
-  Response,
-} from "express";
-
 import { z } from "zod";
 
+/**
+ * Type
+ */
+import type { NextFunction, Request, Response } from "express";
 
 /**
  * Validate Middleware
  */
-export const validate =
+const validation =
   (schema: z.ZodType) =>
-  (
-    req: Request,
-    _res: Response,
-    next: NextFunction,
-  ): void => {
+  (req: Request, _res: Response, next: NextFunction): void => {
     const result = schema.safeParse(req.body);
 
     if (!result.success) {
@@ -34,6 +28,7 @@ export const validate =
     }
 
     req.body = result.data;
-
     next();
   };
+
+export default validation;

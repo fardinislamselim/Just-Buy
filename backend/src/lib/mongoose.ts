@@ -29,8 +29,8 @@ import type { ConnectOptions } from "mongoose";
  * MongoDB Client Configuration
  */
 const clientOptions: ConnectOptions = {
-  dbName: "medi-flow-db",
-  appName: "Medi-Flow-API",
+  dbName: "jus-buy-db",
+  appName: "Jus-Buy-API",
   serverApi: {
     version: "1",
     strict: true,

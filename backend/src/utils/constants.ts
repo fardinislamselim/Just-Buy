@@ -46,6 +46,7 @@ export const ERROR_CODE = {
   INTERNAL_SERVER_ERROR: "INTERNAL_SERVER_ERROR",
 
   // Authentication
+  AUTHENTICATION_ERROR: "AUTHENTICATION_ERROR",
   AUTH_INVALID_CREDENTIALS: "AUTH_INVALID_CREDENTIALS",
   AUTH_EMAIL_EXISTS: "AUTH_EMAIL_EXISTS",
   AUTH_ACCOUNT_NOT_FOUND: "AUTH_ACCOUNT_NOT_FOUND",
@@ -168,6 +169,10 @@ export const API_MESSAGES = {
   USER_UPDATED: "User updated successfully",
   USER_DELETED: "User deleted successfully",
   USER_NOT_FOUND: "User not found",
+
+  // Admin
+  ADMIN_CANNOT_REGISTER: "You cannot register as an admin",
+  ADMIN_PROFILE_CREATED: "Admin profile created successfully",
 
   // Buyer Authentication
   BUYER_SIGNUP_SUCCESS: "Buyer signup successful",

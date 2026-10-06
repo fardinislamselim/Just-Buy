@@ -1,14 +1,18 @@
 /**
  * @copyright 2026
  * @author Fardin Islam Selim - MERN Stack Developer
- * @description Seller Interface
+ * @license Apache-2.0
  */
-
 
 /**
- * Third-Party Modules
+ * Third-Party Module
  */
 import type { Types } from "mongoose";
+
+/**
+ * Type
+ */
+import { Gender } from "@/modules/v1/buyer/buyer.interface";
 
 /**
  * Seller Verification Status
@@ -19,14 +23,25 @@ export enum SellerVerificationStatus {
   REJECTED = "rejected",
 }
 
+/**
+ * Avatar interface
+ */
+export interface IAvatar {
+  publicId: string;
+  url: string;
+  width: number;
+  height: number;
+}
 
 /**
  * Seller Profile
  */
-export interface ISellerProfile {
+export interface ISeller {
   user: Types.ObjectId;
-  store_name: string;
-  shop_address?: string;
-  verification_status: SellerVerificationStatus;
+  storeName: string;
+  phoneNumber: string;
+  shopAddress: string;
+  avatar: IAvatar;
+  gender: Gender;
+  verificationStatus: SellerVerificationStatus;
 }
-

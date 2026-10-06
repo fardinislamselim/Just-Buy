@@ -1,50 +1,40 @@
 /**
  * @copyright 2026
  * @author Fardin Islam Selim - MERN Stack Developer
- * @description Auth Validation
+ * @license Apache-2.0
  */
 
 /**
- * Third-Party Modules
+ * Third-Party Module
  */
 import { z } from "zod";
-
 
 /**
  * User Roles
  */
-export const userRoleSchema = z.enum([
-  "buyer",
-  "seller",
-]);
+export const userRoleSchema = z.enum(["buyer", "seller", "admin"]);
 
 /**
- * Register Validation Schema
+ * User Registar Validation Schema
  */
 export const registerSchema = z.object({
   fullName: z
     .string()
-    .min(2, "Name must be at least 2 characters")
-    .max(100, "Name cannot exceed 100 characters")
+    .min(2, "Full name is required")
+    .max(50, "Full name cannot exceed 50 characters")
     .trim(),
 
   email: z
     .string()
-    .email("Please provide a valid email address")
-    .max(150, "Email cannot exceed 150 characters")
+    .email("Email is required")
+    .max(254, "Email cannot exceed 254 characters")
     .trim()
     .toLowerCase(),
 
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
-    .max(72, "Password cannot exceed 72 characters"),
-
-  phone: z
-    .string()
-    .min(10, "Phone number is invalid")
-    .max(20, "Phone number is invalid")
-    .optional(),
+    .max(128, "Password cannot exceed 128 characters"),
 
   role: userRoleSchema.default("buyer"),
 });
@@ -53,24 +43,16 @@ export const registerSchema = z.object({
  * Login Validation Schema
  */
 export const loginSchema = z.object({
-  email: z
-    .string()
-    .email("Please provide a valid email address")
-    .trim()
-    .toLowerCase(),
+  email: z.string().email("Email is required").trim().toLowerCase(),
 
-  password: z
-    .string()
-    .min(1, "Password is required"),
+  password: z.string().min(1, "Password is required"),
 });
 
 /**
  * Refresh Token Validation Schema
  */
 export const refreshTokenSchema = z.object({
-  refreshToken: z
-    .string()
-    .min(1, "Refresh token is required"),
+  refreshToken: z.string().min(1, "Refresh token is required"),
 });
 
 /**
@@ -78,6 +60,4 @@ export const refreshTokenSchema = z.object({
  */
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
-export type RefreshTokenInput = z.infer<
-  typeof refreshTokenSchema
->;
+export type RefreshTokenInput = z.infer<typeof refreshTokenSchema>;

@@ -1,20 +1,30 @@
 /**
  * @copyright 2026
  * @author Fardin Islam Selim - MERN Stack Developer
- * @description Buyer Interface
+ * @license Apache-2.0
  */
 
 /**
- * Third-Party Modules
+ * Types
  */
+import type { IAvatar } from "@/modules/v1/seller/seller.interface";
 import type { Types } from "mongoose";
 
 /**
- * Buyer Profile
+ * Gender Enum
  */
-export interface IBuyerProfile {
+export enum Gender {
+  MALE = "Male",
+  FEMALE = "Female",
+  OTHER = "Other",
+}
+
+/**
+ * Buyer Interface
+ */
+export interface IBuyer {
   user: Types.ObjectId;
-  shipping_address?: string;
-  created_at?: Date;
-  updated_at?: Date;
+  avatar: IAvatar;
+  phoneNumber: string;
+  gender: Gender;
 }
