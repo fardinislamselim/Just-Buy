@@ -21,7 +21,11 @@ import Seller from "@/modules/v1/seller/seller.model";
 /**
  * Type
  */
-import type { IUpdateSellerRequest } from "@/modules/v1/seller/seller.interface";
+import type {
+  ISellerId,
+  ISellerProfile,
+  IUpdateSellerRequest,
+} from "@/modules/v1/seller/seller.interface";
 
 /**
  * Update seller service
@@ -131,4 +135,31 @@ export const updateSellerService = async ({
 
   // Save the user and doctor
   await Promise.all([user.save(), seller.save()]);
+};
+
+/**
+ * Get Logggin seller service
+ * @param userId - User ID  
+ */
+export const getCurrentSellerProfileService = async ({
+  userId,
+}: ISellerId): Promise<ISellerProfile> => {
+  const seller = await Seller.findOne({
+    user: userId,
+    verificationStatus: "verified",
+  }).populate("user", "fullName email role isActive");
+
+  if (!seller) {
+    logger.warn(API_MESSAGES.SELLER_PROFILE_NOT_FOUND, {
+      userId,
+    });
+
+    throw new AppError(
+      HTTP_STATUS.NOT_FOUND,
+      ERROR_CODE.SELLER_PROFILE_NOT_FOUND,
+      API_MESSAGES.SELLER_PROFILE_NOT_FOUND,
+    );
+  }
+
+  return seller;
 };

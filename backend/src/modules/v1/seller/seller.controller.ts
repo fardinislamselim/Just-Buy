@@ -15,7 +15,10 @@ import sendResponse from "@/utils/sendResponse";
 /**
  * Service
  */
-import { updateSellerService } from "@/modules/v1/seller/seller.service";
+import {
+  getCurrentSellerProfileService,
+  updateSellerService,
+} from "@/modules/v1/seller/seller.service";
 
 /**
  * Type
@@ -34,8 +37,6 @@ export const updateSellerController = asyncHandler(
       file: req.file,
     });
 
-    console.log(data);
-
     // Log the success message
     logger.info(API_MESSAGES.SELLER_PROFILE_UPDATED);
 
@@ -44,6 +45,22 @@ export const updateSellerController = asyncHandler(
       statusCode: HTTP_STATUS.OK,
       success: true,
       message: API_MESSAGES.SELLER_PROFILE_UPDATED,
+    });
+  },
+);
+
+export const getCurrentSellerProfileController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const result = await getCurrentSellerProfileService({
+      userId: req.userId!,
+    });
+
+    logger.info("Seller Profile Get Successfully");
+
+    sendResponse(res, {
+      statusCode: HTTP_STATUS.OK,
+      success: true,
+      data: result,
     });
   },
 );

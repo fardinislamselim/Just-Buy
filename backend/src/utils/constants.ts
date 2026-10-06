@@ -135,7 +135,7 @@ export const API_MESSAGES = {
   DELETED: "Resource deleted successfully",
   BAD_REQUEST: "Invalid request",
   UNAUTHORIZED: "Authentication required",
-  FORBIDDEN: "You do not have permission to perform this action",
+  FORBIDDEN: "You do not have permission to access this resource",
   NOT_FOUND: "Resource not found",
   INTERNAL_SERVER_ERROR: "Internal server error",
   VALIDATION_ERROR: "Validation failed",
