@@ -1,7 +1,7 @@
 /**
  * @copyright 2026
  * @author Fardin Islam Selim - MERN Stack Developer
- * @description Auth Controller
+ * @license Apache-2.0
  */
 
 /**
@@ -187,9 +187,29 @@ const refreshToken = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+/**
+ * Forgot Password Controller
+ * @param {Request} req
+ * @param {Response} res
+ */
+const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
+  const body = req.body;
+  await authService.forgotPassword(body);
+
+
+
+  // Send response
+  sendResponse(res, {
+    statusCode: HTTP_STATUS.OK,
+    success: true,
+    message: API_MESSAGES.PASSWORD_RESET_OTP_SENT,
+  });
+});
+
 export const authController = {
   register,
   login,
   logout,
   refreshToken,
+  forgotPassword,
 };

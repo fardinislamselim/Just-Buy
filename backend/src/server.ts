@@ -11,6 +11,7 @@ import app from "@/app";
 import config from "@/config";
 import { connectToMongoDB, disconnectFromMongoDB } from "@/lib/mongoose";
 import { logger } from "@/lib/winston";
+import { redisClient } from "./lib/redis";
 
 /**
  * HTTP Server
@@ -23,6 +24,7 @@ let server: ReturnType<typeof app.listen>;
 const startServer = async () => {
   try {
     await connectToMongoDB();
+    await redisClient.connect();
 
     server = app.listen(config.PORT, () => {
       logger.info(`Server running on http://localhost:${config.PORT}`);

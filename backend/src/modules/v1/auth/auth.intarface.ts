@@ -54,3 +54,8 @@ export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+// Forgot Password Request Interface
+export interface IForgotPasswordRequest {
+  email: string;
+}

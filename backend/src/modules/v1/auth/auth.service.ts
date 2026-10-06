@@ -5,9 +5,17 @@
  */
 
 /**
+ * Node-js Module
+ */
+import path from "path";
+
+/**
  * Third-Party Module
  */
 import bcrypt from "bcrypt";
+import crypto from "crypto";
+import ejs from "ejs";
+
 
 /**
  * Application Modules
@@ -19,6 +27,9 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "@/utils/jwt";
+import { redisClient } from "@/lib/redis";
+import { transporter } from "@/lib/nodemailer";
+import config from "@/config";
 
 /**
  * Models
@@ -32,10 +43,13 @@ import { SellerProfile } from "@/modules/v1/seller/seller.mode";
  */
 import type {
   AuthResponse,
+  IForgotPasswordRequest,
   ILoginRequest,
   IRegisterRequest,
 } from "@/modules/v1/auth/auth.intarface";
 import type { Request } from "express";
+
+
 
 /**
  * Register Service
@@ -205,8 +219,74 @@ const refreshToken = async (req: Request): Promise<AuthResponse> => {
   };
 };
 
+/**
+ * Forgot Password Service
+ * @param { string } payload
+ * @returns { Promise<AuthResponse> }
+ */
+const forgotPassword = async (payload:IForgotPasswordRequest): Promise<void> => {
+  const { email } = payload;
+
+  const user = await User.findOne({
+    email,
+  });
+
+  if (!user) {
+    throw new AppError(
+      HTTP_STATUS.NOT_FOUND,
+      ERROR_CODE.AUTH_ACCOUNT_NOT_FOUND,
+      API_MESSAGES.ACCOUNT_NOT_FOUND,
+    );
+  }
+
+  if (user.is_active === false) {
+    throw new AppError(
+      HTTP_STATUS.UNAUTHORIZED,
+      ERROR_CODE.AUTH_ACCOUNT_DISABLED,
+      API_MESSAGES.ACCOUNT_DISABLED,
+    );
+  }
+
+  const otp = crypto.randomInt(100000, 1000000).toString();
+
+  const key = `forgot-password-otp:${user.email}`;
+
+  const expirationSeconds = 5 * 60;
+
+  await redisClient.set(key, otp, {
+    expiration: {
+      type: "EX",
+      value: expirationSeconds,
+    },
+  });
+
+  const templatePath = path.join(
+    process.cwd(),
+    "src/templates/forgot-password.ejs",
+  );
+
+  const html = await ejs.renderFile(
+    templatePath,
+    {
+      name: user.fullName,
+      otp,
+      expiresIn: expirationSeconds / 60,
+    },
+  );
+
+  await transporter.sendMail({
+    from: config.EMAIL_SENDER,
+    to: user.email,
+    subject: "Reset Your Just-Buy Password",
+    html,
+  });
+
+
+};
+
 export const authService = {
   register,
   login,
   refreshToken,
+  forgotPassword,
 };
