@@ -45,3 +45,23 @@ export interface ISeller {
   gender: Gender;
   verificationStatus: SellerVerificationStatus;
 }
+
+/**
+ * Seller Request
+ */
+export type SellerRequest = Pick<
+  ISeller,
+  "storeName" | "phoneNumber" | "shopAddress" | "gender"
+> & {
+  fullName: string;
+  password: string;
+};
+
+/**
+ * Seller Update Request
+ */
+export interface IUpdateSellerRequest {
+  userId: Types.ObjectId;
+  payload: SellerRequest;
+  file?: Express.Multer.File;
+}

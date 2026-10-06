@@ -14,9 +14,9 @@ import type { Types } from "mongoose";
  * Gender Enum
  */
 export enum Gender {
-  MALE = "Male",
-  FEMALE = "Female",
-  OTHER = "Other",
+  MALE = "male",
+  FEMALE = "female",
+  OTHER = "other",
 }
 
 /**

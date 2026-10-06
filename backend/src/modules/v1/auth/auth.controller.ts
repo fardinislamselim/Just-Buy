@@ -120,9 +120,9 @@ export const loginController = asyncHandler(
     // Get the message based on user role
     const message =
       result.user.role === "seller"
-        ? API_MESSAGES.SELLER_PROFILE_CREATED
+        ? API_MESSAGES.SELLER_LOGIN_SUCCESS
         : result.user.role === "buyer"
-          ? API_MESSAGES.BUYER_PROFILE_CREATED
+          ? API_MESSAGES.BUYER_LOGIN_SUCCESS
           : API_MESSAGES.ADMIN_PROFILE_CREATED;
 
     sendResponse(res, {
