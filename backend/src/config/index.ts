@@ -43,6 +43,16 @@ const config = {
 
   DEFAULT_LIMIT: 20!,
   DEFAULT_OFFSET: 0!,
+
+  REDIS_HOST: process.env.REDIS_HOST!,
+  REDIS_PORT: process.env.REDIS_PORT!,
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD!,
+  REDIS_USER: process.env.REDIS_USER!,
+
+  SMTP_USER: process.env.SMTP_USER!,
+  SMTP_PASS: process.env.SMTP_PASS!,
+  EMAIL_SENDER: process.env.EMAIL_SENDER!,
+
 };
 
 export default config;

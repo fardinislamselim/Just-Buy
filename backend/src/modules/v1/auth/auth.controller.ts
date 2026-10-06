@@ -1,0 +1,215 @@
+/**
+ * @copyright 2026
+ * @author Fardin Islam Selim - MERN Stack Developer
+ * @license Apache-2.0
+ */
+
+/**
+ * Third-Party Modules
+ */
+import { Request, Response } from "express";
+
+/**
+ * Application Modules
+ */
+import config from "@/config";
+import { logger } from "@/lib/winston";
+import asyncHandler from "@/utils/asyncHandler";
+import { API_MESSAGES, HTTP_STATUS } from "@/utils/constants";
+import sendResponse from "@/utils/sendResponse";
+import { authService } from "./auth.service";
+
+/**
+ * Register Controller
+ * @param {Request} req
+ * @param {Response} res
+ */
+const register = asyncHandler(async (req: Request, res: Response) => {
+  const body = req.body;
+  const result = await authService.register(body);
+
+  // Log the user signup
+  logger.info("User Signup Successfully", {
+    user: {
+      fullName: result.user.fullName,
+      email: result.user.email,
+      role: result.user.role,
+    },
+  });
+
+  // Set access token in cookie
+  res.cookie("accessToken", result.accessToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV !== "development",
+    sameSite: config.NODE_ENV === "development" ? "lax" : "strict",
+    maxAge: 60 * 60 * 1000, // 1 hour
+  });
+
+  // Set refresh token in cookie
+  res.cookie("refreshToken", result.refreshToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV !== "development",
+    sameSite: config.NODE_ENV === "development" ? "lax" : "strict",
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  });
+
+  sendResponse(res, {
+    statusCode: HTTP_STATUS.CREATED,
+    success: true,
+    message: `${result.user.role === "seller" ? API_MESSAGES.SELLER_PROFILE_CREATED : API_MESSAGES.BUYER_PROFILE_CREATED} `,
+    data: {
+      user: {
+        fullName: result.user.fullName,
+        email: result.user.email,
+        role: result.user.role,
+      },
+    },
+  });
+});
+
+/**
+ * Login Controller
+ * @param {Request} req
+ * @param {Response} res
+ */
+const login = asyncHandler(async (req: Request, res: Response) => {
+  const body = req.body;
+  const result = await authService.login(body);
+
+  // Log the user login
+  logger.info("User Login Successfully", {
+    user: {
+      fullName: result.user.fullName,
+      email: result.user.email,
+      role: result.user.role,
+    },
+  });
+
+  // Set access token in cookie
+  res.cookie("accessToken", result.accessToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV !== "development",
+    sameSite: config.NODE_ENV === "development" ? "lax" : "strict",
+    maxAge: 60 * 60 * 1000, // 1 hour
+  });
+
+  // Set refresh token in cookie
+  res.cookie("refreshToken", result.refreshToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV !== "development",
+    sameSite: config.NODE_ENV === "development" ? "lax" : "strict",
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  });
+
+  sendResponse(res, {
+    statusCode: HTTP_STATUS.OK,
+    success: true,
+    message: `${result.user.role === "seller" ? API_MESSAGES.SELLER_LOGIN_SUCCESS : API_MESSAGES.BUYER_LOGIN_SUCCESS} `,
+    data: {
+      user: {
+        fullName: result.user.fullName,
+        email: result.user.email,
+        role: result.user.role,
+      },
+    },
+  });
+});
+
+/**
+ * Logout Controller
+ * @param {Request} req
+ * @param {Response} res
+ */
+const logout = asyncHandler(async (req: Request, res: Response) => {
+  // Clear access token cookie
+  res.clearCookie("accessToken");
+
+  // Clear refresh token cookie
+  res.clearCookie("refreshToken");
+
+  // Log the user logout
+  logger.info("User Logout Successfully");
+
+  // Send response
+  sendResponse(res, {
+    statusCode: HTTP_STATUS.OK,
+    success: true,
+    message: API_MESSAGES.LOGOUT_SUCCESS,
+  });
+});
+
+/**
+ * Refresh Token Controller
+ * @param {Request} req
+ * @param {Response} res
+ */
+const refreshToken = asyncHandler(async (req: Request, res: Response) => {
+
+  // Refresh the token
+  const result = await authService.refreshToken(req);
+
+  // Log the user refresh token
+  logger.info("User Refresh Token Successfully", {
+    user: {
+      fullName: result.user.fullName,
+      email: result.user.email,
+      role: result.user.role,
+    },
+  });
+
+  // Set access token in cookie
+  res.cookie("accessToken", result.accessToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV !== "development",
+    sameSite: config.NODE_ENV === "development" ? "lax" : "strict",
+    maxAge: 60 * 60 * 1000, // 1 hour
+  });
+
+  // Set refresh token in cookie
+  res.cookie("refreshToken", result.refreshToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV !== "development",
+    sameSite: config.NODE_ENV === "development" ? "lax" : "strict",
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  });
+
+  sendResponse(res, {
+    statusCode: HTTP_STATUS.OK,
+    success: true,
+    message: API_MESSAGES.TOKEN_REFRESH_SUCCESS,
+    data: {
+      user: {
+        fullName: result.user.fullName,
+        email: result.user.email,
+        role: result.user.role,
+      },
+    },
+  });
+});
+
+/**
+ * Forgot Password Controller
+ * @param {Request} req
+ * @param {Response} res
+ */
+const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
+  const body = req.body;
+  await authService.forgotPassword(body);
+
+
+
+  // Send response
+  sendResponse(res, {
+    statusCode: HTTP_STATUS.OK,
+    success: true,
+    message: API_MESSAGES.PASSWORD_RESET_OTP_SENT,
+  });
+});
+
+export const authController = {
+  register,
+  login,
+  logout,
+  refreshToken,
+  forgotPassword,
+};
