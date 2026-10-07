@@ -242,6 +242,9 @@ export const API_MESSAGES = {
   CATEGORY_DELETED: "Category deleted successfully",
   CATEGORY_NOT_FOUND: "Category not found",
   CATEGORY_ALREADY_EXISTS: "Category already exists",
+  CATEGORIES_FETCHED: "Categories fetched successfully",
+  CATEGORY_FETCHED: "Category fetched successfully",
+  CATEGORY_STATUS_UPDATED: "Category status updated successfully",
 
   // Cart
   CART_CREATED: "Cart created successfully",
