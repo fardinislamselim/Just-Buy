@@ -66,6 +66,11 @@ export const ERROR_CODE = {
   // Token
   AUTH_TOKEN_REFRESH_FAILED: "AUTH_TOKEN_REFRESH_FAILED",
 
+  // OTP
+  AUTH_INVALID_OTP: "AUTH_INVALID_OTP",
+  AUTH_OTP_EXPIRED: "AUTH_OTP_EXPIRED",
+  AUTH_OTP_NOT_MATCH: "AUTH_OTP_NOT_MATCH",
+
   // User
   USER_NOT_FOUND: "USER_NOT_FOUND",
   USER_ALREADY_EXISTS: "USER_ALREADY_EXISTS",
@@ -164,6 +169,11 @@ export const API_MESSAGES = {
   // Token
   TOKEN_REFRESH_SUCCESS: "Authentication token refreshed successfully",
   TOKEN_REFRESH_FAILED: "Failed to refresh authentication token",
+
+  // OTP
+  INVALID_OTP: "Invalid OTP",
+  OTP_EXPIRED: "OTP has been expired",
+  OTP_NOT_MATCH: "OTP does not match",
 
   // User
   USER_CREATED: "User created successfully",

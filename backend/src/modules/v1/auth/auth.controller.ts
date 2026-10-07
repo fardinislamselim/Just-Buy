@@ -21,6 +21,7 @@ import {
   loginService,
   refreshTokenService,
   registerService,
+  resetPasswordService,
 } from "@/modules/v1/auth/auth.service";
 
 /**
@@ -69,6 +70,7 @@ export const registerController = asyncHandler(
           ? API_MESSAGES.BUYER_PROFILE_CREATED
           : API_MESSAGES.ADMIN_PROFILE_CREATED;
 
+    // Send response
     sendResponse(res, {
       statusCode: HTTP_STATUS.CREATED,
       success: true,
@@ -198,6 +200,25 @@ export const forgotPasswordController = asyncHandler(
       statusCode: HTTP_STATUS.OK,
       success: true,
       message: API_MESSAGES.PASSWORD_RESET_OTP_SENT,
+    });
+  },
+);
+
+/**
+ * Reset Password Controller
+ * @param {Request} req
+ * @param {Response} res
+ */
+export const resetPasswordController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const body = req.body;
+    await resetPasswordService(body);
+
+    // Send response
+    sendResponse(res, {
+      statusCode: HTTP_STATUS.OK,
+      success: true,
+      message: API_MESSAGES.PASSWORD_RESET_SUCCESS,
     });
   },
 );
