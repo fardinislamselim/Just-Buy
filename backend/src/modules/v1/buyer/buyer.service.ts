@@ -22,10 +22,14 @@ import Buyer from "@/modules/v1/buyer/buyer.model";
  * Types
  */
 import type {
+  IAllBuyerProfile,
   IBuyerProfile,
   IUpdateBuyerRequest,
 } from "@/modules/v1/buyer/buyer.interface";
-import type { ISellerId } from "../seller/seller.interface";
+import type {
+  ISellerId,
+  SellerVerificationStatus,
+} from "@/modules/v1/seller/seller.interface";
 
 /**
  * Service for get buyer profile by ID
@@ -55,6 +59,50 @@ export const getBuyerProfileByIdService = async ({
   }
 
   return buyer;
+};
+
+/**
+ * Service for get all buyer profile
+ * @param limit - Maximum number of buyer profiles to retrieve
+ * @param offset - Number of buyer profiles to skip
+ * @param verificationStatus - Buyer profile verification status
+ * @returns {Promise<IAllBuyerProfile>}
+ */
+export const getAllBuyerProfileService = async ({
+  limit,
+  offset,
+  verificationStatus,
+}: {
+  limit: number;
+  offset: number;
+  verificationStatus?: SellerVerificationStatus;
+}): Promise<IAllBuyerProfile> => {
+  // Create filter for buyer profiles
+  const filter: { verificationStatus?: SellerVerificationStatus } = {};
+
+  // Add verification status to filter if provided
+  if (verificationStatus) {
+    filter.verificationStatus = verificationStatus;
+  }
+
+  // Get all seller profiles with count
+  const [totalBuyers, allBuyers] = await Promise.all([
+    Buyer.countDocuments(filter).exec(),
+    Buyer.find(filter)
+      .populate("user", "fullName email role isActive")
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .lean()
+      .exec(),
+  ]);
+
+  return {
+    total: totalBuyers,
+    limit: allBuyers.length,
+    skip: offset,
+    allBuyers,
+  };
 };
 
 /**

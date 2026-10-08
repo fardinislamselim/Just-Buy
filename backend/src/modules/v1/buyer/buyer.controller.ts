@@ -12,6 +12,7 @@ import { Types } from "mongoose";
 /**
  * Application Modules
  */
+import config from "@/config";
 import { logger } from "@/lib/winston";
 import asyncHandler from "@/utils/asyncHandler";
 import { API_MESSAGES, HTTP_STATUS } from "@/utils/constants";
@@ -22,14 +23,16 @@ import sendResponse from "@/utils/sendResponse";
  */
 import {
   deleteBuyerProfileService,
+  getAllBuyerProfileService,
   getBuyerProfileByIdService,
   updateBuyerProfileService,
 } from "@/modules/v1/buyer/buyer.service";
 
 /**
- * Type
+ * Types
  */
 import type { Request, Response } from "express";
+import type { SellerVerificationStatus } from "../seller/seller.interface";
 
 /**
  * Controller for get current buyer profile
@@ -74,6 +77,38 @@ export const getBuyerProfileByIdController = asyncHandler(
       statusCode: HTTP_STATUS.OK,
       success: true,
       data: result,
+    });
+  },
+);
+
+export const getAllBuyerProfileController = asyncHandler(
+  async (req: Request, res: Response) => {
+    // Get limit and offset from request query parameters
+    const limit =
+      parseInt(req.query.limit as string, 15) || config.DEFAULT_LIMIT;
+    const offset =
+      parseInt(req.query.offset as string, 15) || config.DEFAULT_OFFSET;
+    const verificationStatus = req.query
+      .verificationStatus as SellerVerificationStatus;
+
+    // Call get all buyer profile service
+    const result = await getAllBuyerProfileService({
+      limit,
+      offset,
+      verificationStatus: verificationStatus || undefined,
+    });
+
+    // Log success
+    logger.info("Buyer profiles fetched successfully");
+
+    // Send success response
+    sendResponse(res, {
+      statusCode: HTTP_STATUS.OK,
+      success: true,
+      data: result.allBuyers,
+      total: result.total,
+      limit: result.limit,
+      skip: result.skip,
     });
   },
 );

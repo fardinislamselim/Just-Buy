@@ -59,3 +59,13 @@ export interface IBuyerProfile {
   createdAt: string;
   updatedAt: string;
 }
+
+/**
+ * All Buyer Profile Response
+ */
+export interface IAllBuyerProfile {
+  total: number;
+  limit: number;
+  skip: number;
+  allBuyers: IBuyerProfile[];
+}
