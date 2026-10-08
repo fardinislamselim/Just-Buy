@@ -25,6 +25,7 @@ const config = {
   WHITELISTED_ADMIN_MAILS: [
     "dev.rohan2024@gmail.com",
     "mdrohanulhaquerohan368@gmail.com",
+    "codeithfardin@gmail.com"
   ],
   FRONTEND_URL: process.env.FRONTEND_URL!,
 
