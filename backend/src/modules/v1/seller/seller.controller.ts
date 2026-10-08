@@ -79,8 +79,6 @@ export const deleteSellerProfileController = asyncHandler(
       userId: userId as unknown as Types.ObjectId,
     });
 
-    // logger.info(API_MESSAGES.SELLER_PROFILE_DELETED);
-
     sendResponse(res, {
       statusCode: HTTP_STATUS.NO_CONTENT,
       success: true,
