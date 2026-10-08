@@ -41,7 +41,7 @@ const config = {
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY!,
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET!,
 
-  DEFAULT_LIMIT: 20!,
+  DEFAULT_LIMIT: 15!,
   DEFAULT_OFFSET: 0!,
 
   REDIS_HOST: process.env.REDIS_HOST!,
@@ -52,7 +52,6 @@ const config = {
   SMTP_USER: process.env.SMTP_USER!,
   SMTP_PASS: process.env.SMTP_PASS!,
   EMAIL_SENDER: process.env.EMAIL_SENDER!,
-
 };
 
 export default config;

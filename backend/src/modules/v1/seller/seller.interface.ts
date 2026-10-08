@@ -98,3 +98,10 @@ export interface ISellerProfile {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IAllSellerProfile {
+  total: number;
+  limit: number;
+  skip: number;
+  allSellers: ISellerProfile[];
+}

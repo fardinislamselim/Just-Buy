@@ -25,14 +25,22 @@ import validation from "@/middlewares/validation";
  * API Controllers
  */
 import {
+  deleteSellerProfileController,
+  getAllSellerProfileController,
   getCurrentSellerProfileController,
+  getSellerProfileByIdController,
   updateSellerController,
 } from "@/modules/v1/seller/seller.controller";
 
 /**
  * Validations
  */
-import { updateSellerSchema } from "@/modules/v1/seller/seller.validation";
+import {
+  sellerListQuerySchema,
+  updateSellerSchema,
+  userIdSchema,
+} from "@/modules/v1/seller/seller.validation";
+
 import { UserRole } from "../auth/auth.intarface";
 
 /**
@@ -41,9 +49,9 @@ import { UserRole } from "../auth/auth.intarface";
 const router = Router();
 
 /**
- * Update Seller Profile
+ * Get Current Seller Profile
  * @access - private
- * @method - GET  
+ * @method - GET
  * @route - /api/v1/seller/current
  */
 router.get(
@@ -54,9 +62,23 @@ router.get(
 );
 
 /**
- * Update Seller Profile
+ * Get All Seller Profile
  * @access - private
- * @method - PATCH  
+ * @method - GET
+ * @route - /api/v1/seller/list
+ */
+router.get(
+  "/list",
+  authenticate,
+  authorize([UserRole.ADMIN]),
+  validation(sellerListQuerySchema, "query"),
+  getAllSellerProfileController,
+);
+
+/**
+ * Update Current Seller Profile
+ * @access - private
+ * @method - PATCH
  * @route - /api/v1/seller/current
  */
 router.patch(
@@ -66,6 +88,34 @@ router.patch(
   fileUpload.single("avatar"),
   validation(updateSellerSchema),
   updateSellerController,
+);
+
+/**
+ * Get Seller Profile By ID
+ * @access - private
+ * @method - GET
+ * @route - /api/v1/seller/:userId
+ */
+router.get(
+  "/:userId",
+  authenticate,
+  authorize([UserRole.SELLER, UserRole.ADMIN]),
+  validation(userIdSchema, "params"),
+  getSellerProfileByIdController,
+);
+
+/**
+ * Delete Seller Profile By ID
+ * @access - private
+ * @method - DELETE
+ * @route - /api/v1/seller/:userId
+ */
+router.delete(
+  "/:userId",
+  authenticate,
+  authorize([UserRole.SELLER, UserRole.ADMIN]),
+  validation(userIdSchema, "params"),
+  deleteSellerProfileController,
 );
 
 export default router;

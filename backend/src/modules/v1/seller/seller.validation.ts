@@ -7,6 +7,7 @@
 /**
  * Third-Party Module
  */
+import mongoose from "mongoose";
 import { z } from "zod";
 
 export const updateSellerSchema = z.object({
@@ -55,4 +56,22 @@ export const updateSellerSchema = z.object({
     .optional(),
 });
 
+export const objectIdSchema = z
+  .string()
+  .refine((value) => mongoose.Types.ObjectId.isValid(value), {
+    message: "Invalid User ID",
+  });
+
+export const userIdSchema = z.object({
+  userId: objectIdSchema,
+});
+
+export const sellerListQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(50).default(15),
+  offset: z.coerce.number().int().min(0).default(0),
+  verificationStatus: z.enum(["pending", "verified", "rejected"]).optional(),
+});
+
+export type SellerListQueryInput = z.infer<typeof sellerListQuerySchema>;
 export type UpdateSellerInput = z.infer<typeof updateSellerSchema>;
+export type UserIdParamsInput = z.infer<typeof userIdSchema>;
