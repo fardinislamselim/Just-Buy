@@ -7,6 +7,7 @@
 /**
  * Third-Party Module
  */
+import { Types } from "mongoose";
 import { z } from "zod";
 
 export const updateSellerSchema = z.object({
