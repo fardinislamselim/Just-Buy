@@ -7,7 +7,7 @@
 /**
  * Third-Party Module
  */
-import type { Types } from "mongoose";
+import { Types } from "mongoose";
 
 /**
  * Type

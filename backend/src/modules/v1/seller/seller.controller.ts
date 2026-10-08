@@ -31,7 +31,7 @@ import type { Request, Response } from "express";
 export const updateSellerController = asyncHandler(
   async (req: Request, res: Response) => {
     // Call update seller service
-    const data = await updateSellerService({
+    await updateSellerService({
       userId: req.userId!,
       payload: req.body,
       file: req.file,
