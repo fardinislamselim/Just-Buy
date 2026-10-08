@@ -26,6 +26,7 @@ import validation from "@/middlewares/validation";
  */
 import {
   deleteBuyerProfileController,
+  getAllBuyerProfileController,
   getBuyerProfileByIdController,
   getCurrentBuyerProfileController,
   updateBuyerProfileController,
@@ -40,6 +41,7 @@ import { UserRole } from "@/modules/v1/auth/auth.intarface";
  * Validations
  */
 import {
+  buyerListQuerySchema,
   updateBuyerSchema,
   userIdSchema,
 } from "@/modules/v1/buyer/buyer.validation";
@@ -60,6 +62,20 @@ router.get(
   authenticate,
   authorize([UserRole.BUYER]),
   getCurrentBuyerProfileController,
+);
+
+/**
+ * Get All Seller Profiles
+ * @access - Private
+ * @method - GET
+ * @route - /api/v1/seller/list
+ */
+router.get(
+  "/list",
+  authenticate,
+  authorize([UserRole.ADMIN]),
+  validation(buyerListQuerySchema, "query"),
+  getAllBuyerProfileController,
 );
 
 /**
