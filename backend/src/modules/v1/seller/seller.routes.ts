@@ -40,7 +40,6 @@ import {
   updateSellerSchema,
   userIdSchema,
 } from "@/modules/v1/seller/seller.validation";
-
 import { UserRole } from "../auth/auth.intarface";
 
 /**
@@ -50,7 +49,7 @@ const router = Router();
 
 /**
  * Get Current Seller Profile
- * @access - private
+ * @access - Private
  * @method - GET
  * @route - /api/v1/seller/current
  */
@@ -62,8 +61,8 @@ router.get(
 );
 
 /**
- * Get All Seller Profile
- * @access - private
+ * Get All Seller Profiles
+ * @access - Private
  * @method - GET
  * @route - /api/v1/seller/list
  */
@@ -77,7 +76,7 @@ router.get(
 
 /**
  * Update Current Seller Profile
- * @access - private
+ * @access - Private
  * @method - PATCH
  * @route - /api/v1/seller/current
  */
@@ -92,7 +91,7 @@ router.patch(
 
 /**
  * Get Seller Profile By ID
- * @access - private
+ * @access - Private
  * @method - GET
  * @route - /api/v1/seller/:userId
  */
@@ -106,7 +105,7 @@ router.get(
 
 /**
  * Delete Seller Profile By ID
- * @access - private
+ * @access - Private
  * @method - DELETE
  * @route - /api/v1/seller/:userId
  */
