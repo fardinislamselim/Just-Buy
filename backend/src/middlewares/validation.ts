@@ -14,21 +14,31 @@ import { z } from "zod";
  */
 import type { NextFunction, Request, Response } from "express";
 
+export type ValidationSource = "body" | "params" | "query";
+
 /**
  * Validate Middleware
+ * Validates request body, params, or query using Zod schema
  */
 const validation =
-  (schema: z.ZodType) =>
+  (schema: z.ZodType, source: ValidationSource = "body") =>
   (req: Request, _res: Response, next: NextFunction): void => {
-    const result = schema.safeParse(req.body);
+    const result = schema.safeParse(req[source]);
 
     if (!result.success) {
       next(result.error);
       return;
     }
 
-    req.body = result.data;
+    try {
+      (req as unknown as Record<string, unknown>)[source] = result.data;
+    } catch {
+      Object.assign(req[source], result.data);
+    }
     next();
   };
+
+export const validateParams = (schema: z.ZodType) => validation(schema, "params");
+export const validateQuery = (schema: z.ZodType) => validation(schema, "query");
 
 export default validation;

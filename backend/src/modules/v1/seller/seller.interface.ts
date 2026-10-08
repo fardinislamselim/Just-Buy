@@ -29,8 +29,19 @@ export enum SellerVerificationStatus {
 export interface IAvatar {
   publicId: string;
   url: string;
-  width: number;
-  height: number;
+  width: number | null;
+  height: number | null;
+}
+
+/**
+ * User interface
+ */
+export interface IUser {
+  _id: Types.ObjectId;
+  fullName: string;
+  email: string;
+  role: "seller";
+  isActive: boolean;
 }
 
 /**
@@ -44,4 +55,46 @@ export interface ISeller {
   avatar: IAvatar;
   gender: Gender;
   verificationStatus: SellerVerificationStatus;
+}
+
+/**
+ * Seller Request
+ */
+export type SellerRequest = Partial<
+  Pick<ISeller, "storeName" | "phoneNumber" | "shopAddress" | "gender">
+> & {
+  fullName?: string;
+  password?: string;
+};
+
+/**
+ * Seller Update Request
+ */
+export interface IUpdateSellerRequest {
+  userId: Types.ObjectId;
+  payload: SellerRequest;
+  file?: Express.Multer.File;
+}
+
+/**
+ *
+ */
+export interface ISellerId {
+  userId: Types.ObjectId;
+}
+
+/**
+ *
+ */
+export interface ISellerProfile {
+  _id: Types.ObjectId;
+  user: IUser;
+  storeName: string;
+  shopAddress: string;
+  phoneNumber: string;
+  gender: Gender;
+  verificationStatus: SellerVerificationStatus;
+  avatar: IAvatar;
+  createdAt: string;
+  updatedAt: string;
 }

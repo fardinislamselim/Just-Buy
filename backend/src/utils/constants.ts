@@ -23,6 +23,7 @@ export const HTTP_STATUS = {
   CONFLICT: 409,
   UNPROCESSABLE_ENTITY: 422,
   TOO_MANY_REQUESTS: 429,
+  PAYLOAD_TOO_LARGE: 413,
 
   // Server Errors
   INTERNAL_SERVER_ERROR: 500,
@@ -64,6 +65,11 @@ export const ERROR_CODE = {
 
   // Token
   AUTH_TOKEN_REFRESH_FAILED: "AUTH_TOKEN_REFRESH_FAILED",
+
+  // OTP
+  AUTH_INVALID_OTP: "AUTH_INVALID_OTP",
+  AUTH_OTP_EXPIRED: "AUTH_OTP_EXPIRED",
+  AUTH_OTP_NOT_MATCH: "AUTH_OTP_NOT_MATCH",
 
   // User
   USER_NOT_FOUND: "USER_NOT_FOUND",
@@ -134,7 +140,7 @@ export const API_MESSAGES = {
   DELETED: "Resource deleted successfully",
   BAD_REQUEST: "Invalid request",
   UNAUTHORIZED: "Authentication required",
-  FORBIDDEN: "You do not have permission to perform this action",
+  FORBIDDEN: "You do not have permission to access this resource",
   NOT_FOUND: "Resource not found",
   INTERNAL_SERVER_ERROR: "Internal server error",
   VALIDATION_ERROR: "Validation failed",
@@ -163,6 +169,11 @@ export const API_MESSAGES = {
   // Token
   TOKEN_REFRESH_SUCCESS: "Authentication token refreshed successfully",
   TOKEN_REFRESH_FAILED: "Failed to refresh authentication token",
+
+  // OTP
+  INVALID_OTP: "Invalid OTP",
+  OTP_EXPIRED: "OTP has been expired",
+  OTP_NOT_MATCH: "OTP does not match",
 
   // User
   USER_CREATED: "User created successfully",
@@ -231,6 +242,9 @@ export const API_MESSAGES = {
   CATEGORY_DELETED: "Category deleted successfully",
   CATEGORY_NOT_FOUND: "Category not found",
   CATEGORY_ALREADY_EXISTS: "Category already exists",
+  CATEGORIES_FETCHED: "Categories fetched successfully",
+  CATEGORY_FETCHED: "Category fetched successfully",
+  CATEGORY_STATUS_UPDATED: "Category status updated successfully",
 
   // Cart
   CART_CREATED: "Cart created successfully",

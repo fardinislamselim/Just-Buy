@@ -13,6 +13,8 @@ import express from "express";
  * API Routes
  */
 import AuthRoutes from "@/modules/v1/auth/auth.routes";
+import categoryRoutes from "@/modules/v1/category/category.routes";
+import sellerRoutes from "@/modules/v1/seller/seller.routes";
 
 /**
  * API Controller
@@ -29,5 +31,7 @@ const router = express.Router();
  */
 router.use("/health", healthRoute);
 router.use("/auth", AuthRoutes);
+router.use("/seller", sellerRoutes);
+router.use("/categories", categoryRoutes);
 
 export default router;
