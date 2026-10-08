@@ -20,6 +20,11 @@ export type ValidationSource = "body" | "params" | "query";
  * Validate Middleware
  * Validates request body, params, or query using Zod schema
  */
+const validation = (
+  schema: z.ZodType,
+  source: "body" | "params" | "query" = "body",
+) => {
+  return (req: Request, _res: Response, next: NextFunction): void => {
 const validation =
   (schema: z.ZodType, source: ValidationSource = "body") =>
   (req: Request, _res: Response, next: NextFunction): void => {
@@ -30,6 +35,26 @@ const validation =
       return;
     }
 
+    if (source === "body") {
+      req.body = result.data;
+    }
+
+    if (source === "params") {
+      Object.assign(req.params, result.data);
+    }
+
+    if (source === "query") {
+      const data = result.data as Record<string, any>;
+      Object.keys(data).forEach((key) => {
+        Object.defineProperty(req.query, key, {
+          value: data[key],
+          writable: true,
+          enumerable: true,
+          configurable: true,
+        });
+      });
+    }
+
     try {
       (req as unknown as Record<string, unknown>)[source] = result.data;
     } catch {
@@ -37,6 +62,7 @@ const validation =
     }
     next();
   };
+};
 
 export const validateParams = (schema: z.ZodType) => validation(schema, "params");
 export const validateQuery = (schema: z.ZodType) => validation(schema, "query");

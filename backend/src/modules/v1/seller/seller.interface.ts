@@ -24,7 +24,7 @@ export enum SellerVerificationStatus {
 }
 
 /**
- * Avatar interface
+ * Avatar Interface
  */
 export interface IAvatar {
   publicId: string;
@@ -34,7 +34,7 @@ export interface IAvatar {
 }
 
 /**
- * User interface
+ * User Interface
  */
 export interface IUser {
   _id: Types.ObjectId;
@@ -77,14 +77,14 @@ export interface IUpdateSellerRequest {
 }
 
 /**
- *
+ * Seller ID
  */
 export interface ISellerId {
   userId: Types.ObjectId;
 }
 
 /**
- *
+ * Seller Profile Response
  */
 export interface ISellerProfile {
   _id: Types.ObjectId;
@@ -97,4 +97,14 @@ export interface ISellerProfile {
   avatar: IAvatar;
   createdAt: string;
   updatedAt: string;
+}
+
+/**
+ * All Seller Profile Response
+ */
+export interface IAllSellerProfile {
+  total: number;
+  limit: number;
+  skip: number;
+  allSellers: ISellerProfile[];
 }

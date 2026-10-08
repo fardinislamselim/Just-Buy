@@ -22,9 +22,11 @@ import Seller from "@/modules/v1/seller/seller.model";
  * Type
  */
 import type {
+  IAllSellerProfile,
   ISellerId,
   ISellerProfile,
   IUpdateSellerRequest,
+  SellerVerificationStatus,
 } from "@/modules/v1/seller/seller.interface";
 
 /**
@@ -138,18 +140,24 @@ export const updateSellerService = async ({
 };
 
 /**
- * Get Logggin seller service
- * @param userId - User ID  
+ * Get Current Seller Profile service
+ * @param userId - User ID
+ * @returns Promise<ISellerProfile>
  */
 export const getCurrentSellerProfileService = async ({
   userId,
 }: ISellerId): Promise<ISellerProfile> => {
+  // Find seller by user ID
   const seller = await Seller.findOne({
     user: userId,
-    verificationStatus: "verified",
-  }).populate("user", "fullName email role isActive");
+  })
+    .populate("user", "fullName email role isActive")
+    .lean()
+    .exec();
 
+  // Check if seller found
   if (!seller) {
+    // Log the warning message
     logger.warn(API_MESSAGES.SELLER_PROFILE_NOT_FOUND, {
       userId,
     });
@@ -162,4 +170,89 @@ export const getCurrentSellerProfileService = async ({
   }
 
   return seller;
+};
+
+/**
+ * Delete Seller Profile service
+ * @param userId - User ID
+ */
+export const deleteControllerSellerService = async ({
+  userId,
+}: ISellerId): Promise<void> => {
+  // Find user and seller by user ID
+  const [user, seller] = await Promise.all([
+    User.findById(userId).lean().exec(),
+    Seller.findOne({ user: userId }).lean().exec(),
+  ]);
+
+  // Check if user found
+  if (!user) {
+    // Log the warning message
+    logger.warn(API_MESSAGES.USER_NOT_FOUND, { userId });
+
+    // Throw the error
+    throw new AppError(
+      HTTP_STATUS.NOT_FOUND,
+      ERROR_CODE.USER_NOT_FOUND,
+      API_MESSAGES.USER_NOT_FOUND,
+    );
+  }
+
+  // Check if seller found
+  if (!seller) {
+    logger.warn(API_MESSAGES.SELLER_PROFILE_NOT_FOUND, { userId });
+
+    // Throw the error
+    throw new AppError(
+      HTTP_STATUS.NOT_FOUND,
+      ERROR_CODE.SELLER_PROFILE_NOT_FOUND,
+      API_MESSAGES.SELLER_PROFILE_NOT_FOUND,
+    );
+  }
+
+  // Delete user and seller
+  await Promise.all([user.deleteOne(), seller.deleteOne()]);
+};
+
+/**
+ * Get All Seller Profiles service
+ * @param limit - Limit
+ * @param offset - Offset
+ * @param verificationStatus - Verification status
+ */
+export const getAllSellerProfileService = async ({
+  limit,
+  offset,
+  verificationStatus,
+}: {
+  limit: number;
+  offset: number;
+  verificationStatus?: SellerVerificationStatus;
+}): Promise<IAllSellerProfile> => {
+  // Create filter for seller profiles
+  const filter: { verificationStatus?: SellerVerificationStatus } = {};
+
+  // Add verification status to filter if provided
+  if (verificationStatus) {
+    filter.verificationStatus = verificationStatus;
+  }
+
+  // Get all seller profiles with count
+  const [totalSellers, allSellers] = await Promise.all([
+    Seller.countDocuments(filter).exec(),
+    Seller.find(filter)
+      .populate("user", "fullName email role isActive")
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .lean()
+      .exec(),
+  ]);
+
+  return {
+    total: totalSellers,
+    limit: allSellers.length,
+    skip: offset,
+    allSellers,
+  };
 };
