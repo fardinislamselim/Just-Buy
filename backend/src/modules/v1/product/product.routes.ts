@@ -57,7 +57,7 @@ const router = Router();
 router.post(
   "/",
   authenticate,
-  authorize([UserRole.SELLER, UserRole.ADMIN]),
+  authorize([UserRole.SELLER]),
   fileUpload.array("images"),
   validation(createProductSchema),
   createProductController,
@@ -70,7 +70,7 @@ router.post(
  * @route - /api/v1/product/list
  */
 router.get(
-  [ "/list"],
+  "/list",
   validation(getProductsQuerySchema, "query"),
   getAllProductsController,
 );
