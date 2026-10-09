@@ -15,6 +15,7 @@ import express from "express";
 import AuthRoutes from "@/modules/v1/auth/auth.routes";
 import buyerRoutes from "@/modules/v1/buyer/buyer.routes";
 import categoryRoutes from "@/modules/v1/category/category.routes";
+import productRoutes from "@/modules/v1/product/product.routes";
 import sellerRoutes from "@/modules/v1/seller/seller.routes";
 
 /**
@@ -35,5 +36,6 @@ router.use("/auth", AuthRoutes);
 router.use("/seller", sellerRoutes);
 router.use("/buyer", buyerRoutes);
 router.use("/categories", categoryRoutes);
+router.use("/product", productRoutes);
 
 export default router;

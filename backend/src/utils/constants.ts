@@ -84,6 +84,7 @@ export const ERROR_CODE = {
   SELLER_PROFILE_NOT_FOUND: "SELLER_PROFILE_NOT_FOUND",
   SELLER_PROFILE_UPDATE_FAILED: "SELLER_PROFILE_UPDATE_FAILED",
   SELLER_NOT_APPROVED: "SELLER_NOT_APPROVED",
+  SELLER_UNAUTHORIZED_ACCESS: "SELLER_UNAUTHORIZED_ACCESS",
 
   // Product
   PRODUCT_NOT_FOUND: "PRODUCT_NOT_FOUND",
@@ -213,6 +214,7 @@ export const API_MESSAGES = {
   SELLER_VERIFICATION_PENDING: "Seller verification is pending",
   SELLER_VERIFIED: "Seller account has been verified",
   SELLER_REJECTED: "Seller account has been rejected",
+  SELLER_CANNOT_CREATE_PRODUCT: "You cannot create product because your account is not approved", 
 
   // Password
   PASSWORD_CHANGED: "Password changed successfully",
@@ -235,6 +237,8 @@ export const API_MESSAGES = {
   PRODUCT_NOT_FOUND: "Product not found",
   PRODUCT_ALREADY_EXISTS: "Product already exists",
   PRODUCT_OUT_OF_STOCK: "Product is out of stock",
+  PRODUCTS_FETCHED: "Products fetched successfully",
+  PRODUCT_FETCHED: "Product fetched successfully",
 
   // Category
   CATEGORY_CREATED: "Category created successfully",
