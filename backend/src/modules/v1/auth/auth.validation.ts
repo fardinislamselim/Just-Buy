@@ -43,9 +43,17 @@ export const registerSchema = z.object({
  * Login Validation Schema
  */
 export const loginSchema = z.object({
-  email: z.string().email("Email is required").trim().toLowerCase(),
+email: z
+    .string()
+    .trim()
+    .min(1, "Email is required.")
+    .email("Please enter a valid email address.")
+    .toLowerCase(),
 
-  password: z.string().min(1, "Password is required"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters.")
+    .max(128, "Password cannot exceed 128 characters."),
 });
 
 /**

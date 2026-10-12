@@ -105,7 +105,7 @@ export const registerService = async (
   // Create Profile based on role
   if (role === UserRole.BUYER) {
     await Buyer.create({
-      user: user?._id,
+      user: user?._id
     });
   }
 

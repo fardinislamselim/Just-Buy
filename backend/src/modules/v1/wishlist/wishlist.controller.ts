@@ -24,7 +24,7 @@ import { HTTP_STATUS } from "@/utils/constants";
 export const addWishlistController = asyncHandler(
   async (req: Request, res: Response) => {
     const { productId } = req.params;
-    const buyerId = req.userId;
+    const buyerId = req.userId?.toString() as string;
 
     await addWishlistService(buyerId, productId);
 
