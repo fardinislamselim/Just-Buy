@@ -17,23 +17,22 @@ import { API_MESSAGES, ERROR_CODE, HTTP_STATUS } from "@/utils/constants";
 /**
  * Models
  */
-import Category from "@/modules/v1/category/category.model";
-import Product from "@/modules/v1/product/product.model";
 import User from "@/modules/v1/auth/auth.model";
+import Product from "@/modules/v1/product/product.model";
 
 /**
  * Roles & Types
  */
-import { UserRole } from "@/modules/v1/auth/auth.intarface";
 import type {
   ICreateProductRequest,
   IGetProductsQuery,
   IGetProductsResult,
   IProduct,
-  IProductImage,
+  IProductId,
   IUpdateProductRequest,
 } from "@/modules/v1/product/product.interface";
-import { SellerVerificationStatus } from "../seller/seller.interface";
+import { UserRole } from "../auth/auth.intarface";
+import Category from "../category/category.model";
 
 /**
  * Create Product Service (Add product)
@@ -41,129 +40,95 @@ import { SellerVerificationStatus } from "../seller/seller.interface";
  * @returns {Promise<IProduct>} Created product document
  */
 export const createProductService = async ({
-  userId,
+  sellerId,
   payload,
-  files,
+  files = [],
 }: ICreateProductRequest): Promise<IProduct> => {
-  const {} = payload
-  // Determine seller ID: payload.seller if provided and valid, otherwise userId
-  let sellerId = userId;
-  if (payload.seller) {
-    if (!Types.ObjectId.isValid(String(payload.seller))) {
+  // Validate product images
+  if (files.length === 0) {
+    throw new AppError(
+      HTTP_STATUS.BAD_REQUEST,
+      ERROR_CODE.VALIDATION_ERROR,
+      "At least one product image is required",
+    );
+  }
+
+  if (payload.category) {
+    const existingCategory = await Category.findOne({
+      name: {
+        $regex: `^${payload.category.trim()}$`,
+        $options: "i",
+      },
+    });
+
+    if (!existingCategory) {
       throw new AppError(
         HTTP_STATUS.BAD_REQUEST,
-        ERROR_CODE.BAD_REQUEST,
-        "Invalid seller ID",
+        ERROR_CODE.VALIDATION_ERROR,
+        "Category not found. Please select an existing category.",
       );
     }
-
-    const sellerExists = await User.findById(payload.seller);
-
-    // Check if seller exists
-    if (!sellerExists) {
-      logger.warn(API_MESSAGES.USER_NOT_FOUND, { sellerId: payload.seller });
-      throw new AppError(
-        HTTP_STATUS.NOT_FOUND,
-        ERROR_CODE.USER_NOT_FOUND,
-        API_MESSAGES.USER_NOT_FOUND,
-      );
-    }
-
-    // Check if seller is authorized to create products (seller role)
-    if (sellerExists.verificationStatus !== SellerVerificationStatus.VERIFIED) {
-      logger.warn(API_MESSAGES.SELLER_CANNOT_CREATE_PRODUCT, {
-        userId: sellerExists._id,
-      });
-      throw new AppError(
-        HTTP_STATUS.UNAUTHORIZED,
-        ERROR_CODE.SELLER_UNAUTHORIZED_ACCESS,
-        API_MESSAGES.SELLER_CANNOT_CREATE_PRODUCT,
-      );
-    }
-
-    sellerId = new Types.ObjectId(payload.seller);
   }
 
-  // Validate category existence
-  const category = await Category.findById(payload.category);
-  if (!category) {
-    logger.warn(API_MESSAGES.CATEGORY_NOT_FOUND, {
-      categoryId: payload.category,
-    });
+  // Validate image size (5 MB per image)
+  const maxFileSize = 5 * 1024 * 1024;
+
+  if (files.some((file) => file.size > maxFileSize)) {
     throw new AppError(
-      HTTP_STATUS.NOT_FOUND,
-      ERROR_CODE.CATEGORY_NOT_FOUND,
-      API_MESSAGES.CATEGORY_NOT_FOUND,
+      HTTP_STATUS.PAYLOAD_TOO_LARGE,
+      ERROR_CODE.FILE_TOO_LARGE,
+      "Each product image must not exceed 5 MB",
     );
   }
 
-  const trimmedName = payload.name.trim();
+  const uploadedPublicIds: string[] = [];
 
-  // Check if product with the same name already exists for this seller
-  const existingProduct = await Product.findOne({
-    seller: sellerId,
-    name: { $regex: new RegExp(`^${trimmedName}$`, "i") },
-  });
+  try {
+    // Upload images to Cloudinary
+    const images = await Promise.all(
+      files.map(async (file) => {
+        const result = await uploadToCloudinary(
+          file.buffer,
+          "Just-Buy-API/products",
+        );
 
-  if (existingProduct) {
-    logger.warn(API_MESSAGES.PRODUCT_ALREADY_EXISTS, {
-      name: trimmedName,
+        uploadedPublicIds.push(result.public_id);
+
+        return {
+          publicId: result.public_id,
+          url: result.secure_url,
+          width: result.width ?? null,
+          height: result.height ?? null,
+        };
+      }),
+    );
+
+    // Create product in MongoDB
+    const product = await Product.create({
+      ...payload,
+      seller: sellerId,
+      images,
+    });
+
+    logger.info("Product created successfully", {
+      productId: product._id,
       sellerId,
     });
-    throw new AppError(
-      HTTP_STATUS.CONFLICT,
-      ERROR_CODE.PRODUCT_ALREADY_EXISTS,
-      API_MESSAGES.PRODUCT_ALREADY_EXISTS,
+
+    return product;
+  } catch (error) {
+    // Clean up uploaded images if product creation fails
+    await Promise.allSettled(
+      uploadedPublicIds.map((publicId) => deleteFromCloudinary(publicId)),
     );
+
+    logger.error("Failed to create product", {
+      sellerId,
+      error,
+    });
+
+    throw error;
   }
-
-  // Process images: combine payload images with uploaded files
-  const images: IProductImage[] = Array.isArray(payload.images)
-    ? [...payload.images]
-    : [];
-
-  if (files && files.length > 0) {
-    for (const file of files) {
-      if (file.size > 5 * 1024 * 1024) {
-        throw new AppError(
-          HTTP_STATUS.PAYLOAD_TOO_LARGE,
-          ERROR_CODE.FILE_TOO_LARGE,
-          API_MESSAGES.FILE_TOO_LARGE,
-        );
-      }
-
-      const cloudinaryData = await uploadToCloudinary(
-        file.buffer,
-        "Just-Buy-API/products",
-      );
-
-      images.push({
-        publicId: cloudinaryData.public_id,
-        url: cloudinaryData.secure_url,
-        width: cloudinaryData.width ?? null,
-        height: cloudinaryData.height ?? null,
-      });
-    }
-  }
-
-  // Create product document
-  const product = await Product.create({
-    seller: sellerId,
-    category: payload.category,
-    name: trimmedName,
-    description: payload.description ? payload.description.trim() : "",
-    price: payload.price,
-    stockQuantity: payload.stockQuantity ?? 0,
-    images,
-    isFeatured: payload.isFeatured ?? false,
-  });
-
-  await product.populate([
-    { path: "seller", select: "fullName email role" },
-    { path: "category", select: "name slug" },
-  ]);
-
-  return product;
 };
 
 /**
@@ -171,129 +136,69 @@ export const createProductService = async ({
  * @param {IGetProductsQuery} query - Filtering, pagination and sorting options
  * @returns {Promise<IGetProductsResult>} Paginated products results
  */
+
 export const getAllProductsService = async (
   query: IGetProductsQuery,
 ): Promise<IGetProductsResult> => {
-  const page = Math.max(1, Number(query.page) || 1);
-  const limit = Math.max(1, Math.min(100, Number(query.limit) || 10));
-  const skip = (page - 1) * limit;
+  const limit = query.limit;
+  const skip = query.offset;
 
   const filter: Record<string, unknown> = {};
 
-  // Search filter by name or description
-  if (query.search) {
+  // Filter by product name
+  if (query.name) {
+    filter.name = new RegExp(query.name.trim(), "i");
+  }
+
+  // Search by name or description
+  if (query.search?.trim()) {
     const searchRegex = new RegExp(query.search.trim(), "i");
+
     filter.$or = [{ name: searchRegex }, { description: searchRegex }];
   }
 
-  // Category filter (supports ObjectId or slug)
-  const categoryQuery =
-    query.category ||
-    (query as Record<string, unknown>).categoryId ||
-    (query as Record<string, unknown>).category_id;
-
-  if (categoryQuery && typeof categoryQuery === "string") {
-    if (Types.ObjectId.isValid(categoryQuery)) {
-      filter.category = categoryQuery;
-    } else {
-      const foundCategory = await Category.findOne({
-        slug: categoryQuery.trim().toLowerCase(),
-      })
-        .select("_id")
-        .lean();
-
-      if (foundCategory) {
-        filter.category = foundCategory._id;
-      } else {
-        filter.category = new Types.ObjectId();
-      }
-    }
+  // Filter by category
+  if (query.category) {
+    filter.category = new RegExp(`^${query.category.trim()}$`, "i");
   }
 
-  // Seller filter
-  const sellerQuery =
-    query.seller ||
-    (query as Record<string, unknown>).sellerId ||
-    (query as Record<string, unknown>).seller_id;
-
-  if (
-    sellerQuery &&
-    typeof sellerQuery === "string" &&
-    Types.ObjectId.isValid(sellerQuery)
-  ) {
-    filter.seller = sellerQuery;
+  // Filter by exact price
+  if (query.price !== undefined) {
+    filter.price = query.price;
   }
 
-  // Featured filter
-  const isFeatured =
-    query.isFeatured !== undefined
-      ? query.isFeatured
-      : (query as Record<string, unknown>).is_featured;
-
-  if (isFeatured !== undefined) {
-    filter.isFeatured = isFeatured;
-  }
-
-  // Price range filter
-  if (query.minPrice !== undefined || query.maxPrice !== undefined) {
-    const priceFilter: Record<string, number> = {};
-    if (query.minPrice !== undefined) {
-      priceFilter.$gte = Number(query.minPrice);
-    }
-    if (query.maxPrice !== undefined) {
-      priceFilter.$lte = Number(query.maxPrice);
-    }
-    filter.price = priceFilter;
-  }
-
-  // Sorting
-  const sortBy = query.sortBy || "createdAt";
-  const sortOrder = query.sortOrder === "asc" ? 1 : -1;
-
-  // Execute query and count documents in parallel
+  // Fetch products and count in parallel
   const [products, total] = await Promise.all([
     Product.find(filter)
-      .populate("seller", "fullName email role")
-      .populate("category", "name slug")
-      .sort({ [sortBy]: sortOrder })
-      .skip(skip)
-      .limit(limit)
+      .populate("seller", "_id fullName email role")
+      .sort({ createdAt: -1 })
+      .skip(Number(skip))
+      .limit(Number(limit))
       .lean(),
+
     Product.countDocuments(filter),
   ]);
 
-  const totalPages = Math.ceil(total / limit) || 1;
-
   return {
-    products: products as unknown as IProduct[],
+    products,
     total,
-    page,
-    limit,
-    totalPages,
-    skip,
+    limit: Number(limit),
+    skip: Number(skip),
   };
 };
 
 /**
  * Get Product By ID Service (Product details)
- * @param {string} productId - Product ObjectId string
+ * @param {IProductId} params - Product ObjectId
  * @returns {Promise<IProduct>} Product document
  */
-export const getProductByIdService = async (
-  productId: string,
-): Promise<IProduct> => {
-  if (!Types.ObjectId.isValid(productId)) {
-    throw new AppError(
-      HTTP_STATUS.BAD_REQUEST,
-      ERROR_CODE.BAD_REQUEST,
-      "Invalid product ID",
-    );
-  }
-
+export const getProductByIdService = async ({
+  productId,
+}: IProductId): Promise<IProduct> => {
   const product = await Product.findById(productId)
     .populate("seller", "fullName email role")
-    .populate("category", "name slug")
-    .lean();
+    .lean()
+    .exec();
 
   if (!product) {
     logger.warn(API_MESSAGES.PRODUCT_NOT_FOUND, { productId });
@@ -304,7 +209,7 @@ export const getProductByIdService = async (
     );
   }
 
-  return product as unknown as IProduct;
+  return product;
 };
 
 /**
@@ -312,24 +217,22 @@ export const getProductByIdService = async (
  * @param {IUpdateProductRequest} params - Product ID, user ID, payload, and optional files
  * @returns {Promise<IProduct>} Updated product document
  */
+
 export const updateProductService = async ({
   productId,
   userId,
   payload,
   files,
-}: IUpdateProductRequest): Promise<IProduct> => {
-  if (!Types.ObjectId.isValid(productId)) {
-    throw new AppError(
-      HTTP_STATUS.BAD_REQUEST,
-      ERROR_CODE.BAD_REQUEST,
-      "Invalid product ID",
-    );
-  }
+}: IUpdateProductRequest): Promise<void> => {
+  const { name, description, category, brand, price, stockQuantity, sizes } =
+    payload;
 
+  // Find product
   const product = await Product.findById(productId);
 
   if (!product) {
     logger.warn(API_MESSAGES.PRODUCT_NOT_FOUND, { productId });
+
     throw new AppError(
       HTTP_STATUS.NOT_FOUND,
       ERROR_CODE.PRODUCT_NOT_FOUND,
@@ -337,94 +240,88 @@ export const updateProductService = async ({
     );
   }
 
-  // Authorization check: seller can only update their own product, Admin can update any
-  if (userId) {
-    const user = await User.findById(userId).select("role").lean();
-    if (
-      user &&
-      user.role !== UserRole.ADMIN &&
-      String(product.seller) !== String(userId)
-    ) {
-      throw new AppError(
-        HTTP_STATUS.FORBIDDEN,
-        ERROR_CODE.FORBIDDEN,
-        API_MESSAGES.FORBIDDEN,
-      );
-    }
+  // Verify seller and product ownership
+  if (!userId) {
+    throw new AppError(
+      HTTP_STATUS.UNAUTHORIZED,
+      ERROR_CODE.UNAUTHORIZED,
+      "Authentication required",
+    );
   }
 
-  // If category is updated, verify it exists
-  if (payload.category) {
-    if (!Types.ObjectId.isValid(String(payload.category))) {
-      throw new AppError(
-        HTTP_STATUS.BAD_REQUEST,
-        ERROR_CODE.BAD_REQUEST,
-        "Invalid category ID",
-      );
-    }
+  const user = await User.findById(userId).select("role").lean();
 
-    const category = await Category.findById(payload.category);
-    if (!category) {
-      throw new AppError(
-        HTTP_STATUS.NOT_FOUND,
-        ERROR_CODE.CATEGORY_NOT_FOUND,
-        API_MESSAGES.CATEGORY_NOT_FOUND,
-      );
-    }
-    product.category = new Types.ObjectId(payload.category);
+  if (!user || user.role !== UserRole.SELLER) {
+    throw new AppError(
+      HTTP_STATUS.FORBIDDEN,
+      ERROR_CODE.FORBIDDEN,
+      API_MESSAGES.FORBIDDEN,
+    );
   }
 
-  // If name is updated, check for duplicate name under the same seller
-  if (payload.name && payload.name.trim() !== product.name) {
-    const trimmedName = payload.name.trim();
-    const duplicate = await Product.findOne({
-      _id: { $ne: product._id },
-      seller: product.seller,
-      name: { $regex: new RegExp(`^${trimmedName}$`, "i") },
+  // Validate category created by admin
+  if (category) {
+    const existingCategory = await Category.findOne({
+      name: {
+        $regex: `^${category.trim()}$`,
+        $options: "i",
+      },
     });
 
-    if (duplicate) {
+    if (!existingCategory) {
       throw new AppError(
-        HTTP_STATUS.CONFLICT,
-        ERROR_CODE.PRODUCT_ALREADY_EXISTS,
-        API_MESSAGES.PRODUCT_ALREADY_EXISTS,
+        HTTP_STATUS.NOT_FOUND,
+        ERROR_CODE.NOT_FOUND,
+        "Category not found",
       );
     }
-    product.name = trimmedName;
+
+    product.category = existingCategory;
   }
 
-  if (payload.description !== undefined) {
-    product.description = payload.description.trim();
+  // Update product name
+  if (name) {
+    product.name = name;
   }
 
-  if (payload.price !== undefined) {
-    product.price = payload.price;
+  // Update description
+  if (description) {
+    product.description = description;
   }
 
-  if (payload.stockQuantity !== undefined) {
-    product.stockQuantity = payload.stockQuantity;
+  // Update brand
+  if (brand) {
+    product.brand = brand;
   }
 
-  if (payload.isFeatured !== undefined) {
-    product.isFeatured = payload.isFeatured;
+  // Update price, including zero
+  if (price) {
+    product.price = price;
   }
 
-  // Replace images if payload specifies images
-  if (payload.images !== undefined) {
-    product.images = payload.images;
+  // Update stock, including zero
+  if (stockQuantity) {
+    product.stockQuantity = stockQuantity;
   }
 
-  // Upload and append new files if provided
-  if (files && files.length > 0) {
+  // Update sizes
+  if (sizes) {
+    product.sizes = sizes;
+  }
+
+  // Validate image size and upload new images
+  if (files?.length) {
+    const maxFileSize = 5 * 1024 * 1024;
+
+    if (files.some((file) => file.size > maxFileSize)) {
+      throw new AppError(
+        HTTP_STATUS.PAYLOAD_TOO_LARGE,
+        ERROR_CODE.FILE_TOO_LARGE,
+        API_MESSAGES.FILE_TOO_LARGE,
+      );
+    }
+
     for (const file of files) {
-      if (file.size > 5 * 1024 * 1024) {
-        throw new AppError(
-          HTTP_STATUS.PAYLOAD_TOO_LARGE,
-          ERROR_CODE.FILE_TOO_LARGE,
-          API_MESSAGES.FILE_TOO_LARGE,
-        );
-      }
-
       const cloudinaryData = await uploadToCloudinary(
         file.buffer,
         "Just-Buy-API/products",
@@ -440,32 +337,18 @@ export const updateProductService = async ({
   }
 
   await product.save();
-  await product.populate([
-    { path: "seller", select: "fullName email role" },
-    { path: "category", select: "name slug" },
-  ]);
-
-  return product;
 };
 
 /**
  * Delete Product Service
- * @param {string} productId - Product ObjectId string
+ * @param {Types.ObjectId} productId - Product ObjectId string
  * @param {Types.ObjectId} [userId] - Optional user ID for authorization check
  * @returns {Promise<void>}
  */
 export const deleteProductService = async (
-  productId: string,
+  productId: Types.ObjectId,
   userId?: Types.ObjectId,
 ): Promise<void> => {
-  if (!Types.ObjectId.isValid(productId)) {
-    throw new AppError(
-      HTTP_STATUS.BAD_REQUEST,
-      ERROR_CODE.BAD_REQUEST,
-      "Invalid product ID",
-    );
-  }
-
   const product = await Product.findById(productId);
 
   if (!product) {
@@ -479,11 +362,7 @@ export const deleteProductService = async (
 
   if (userId) {
     const user = await User.findById(userId).select("role").lean();
-    if (
-      user &&
-      user.role !== UserRole.ADMIN &&
-      String(product.seller) !== String(userId)
-    ) {
+    if (user && user.role !== UserRole.SELLER) {
       throw new AppError(
         HTTP_STATUS.FORBIDDEN,
         ERROR_CODE.FORBIDDEN,

@@ -20,6 +20,7 @@ import sendResponse from "@/utils/sendResponse";
 /**
  * Application Services
  */
+import config from "@/config";
 import {
   createProductService,
   deleteProductService,
@@ -27,6 +28,7 @@ import {
   getProductByIdService,
   updateProductService,
 } from "@/modules/v1/product/product.service";
+import { Types } from "mongoose";
 
 /**
  * Create Product Controller (Add product)
@@ -34,14 +36,16 @@ import {
  * @method - POST
  * @route - /api/v1/products
  */
+
+/**
+ * Create Product Controller
+ */
 export const createProductController = asyncHandler(
   async (req: Request, res: Response) => {
-    const files =
-      (req.files as Express.Multer.File[]) ||
-      (req.file ? [req.file] : undefined);
+    const files = Array.isArray(req.files) ? req.files : [];
 
-    const data = await createProductService({
-      userId: req.userId!,
+    await createProductService({
+      sellerId: req.userId!,
       payload: req.body,
       files,
     });
@@ -52,7 +56,6 @@ export const createProductController = asyncHandler(
       statusCode: HTTP_STATUS.CREATED,
       success: true,
       message: API_MESSAGES.PRODUCT_CREATED,
-      data,
     });
   },
 );
@@ -63,16 +66,31 @@ export const createProductController = asyncHandler(
  * @method - GET
  * @route - /api/v1/products
  */
+
 export const getAllProductsController = asyncHandler(
   async (req: Request, res: Response) => {
-    const result = await getAllProductsService(req.query);
+    const { category, name, price, search } = req.query;
+
+    const limit =
+      parseInt(req.query.limit as string, 10) || config.DEFAULT_LIMIT;
+
+    const offset =
+      parseInt(req.query.offset as string, 10) || config.DEFAULT_OFFSET;
+
+    const result = await getAllProductsService({
+      category: category as string,
+      name: name as string,
+      price: price ? Number(price) : undefined,
+      search: search as string,
+      limit,
+      offset,
+    });
 
     logger.info(API_MESSAGES.PRODUCTS_FETCHED);
 
     sendResponse(res, {
       statusCode: HTTP_STATUS.OK,
       success: true,
-      message: API_MESSAGES.PRODUCTS_FETCHED,
       data: result.products,
       total: result.total,
       skip: result.skip,
@@ -89,15 +107,18 @@ export const getAllProductsController = asyncHandler(
  */
 export const getProductByIdController = asyncHandler(
   async (req: Request, res: Response) => {
-    const data = await getProductByIdService(req.params.id as string);
+    const productId = req.params.productId;
+
+    const result = await getProductByIdService({
+      productId: productId as unknown as Types.ObjectId,
+    });
 
     logger.info(API_MESSAGES.PRODUCT_FETCHED);
 
     sendResponse(res, {
       statusCode: HTTP_STATUS.OK,
       success: true,
-      message: API_MESSAGES.PRODUCT_FETCHED,
-      data,
+      data: result,
     });
   },
 );
@@ -114,9 +135,9 @@ export const updateProductController = asyncHandler(
       (req.files as Express.Multer.File[]) ||
       (req.file ? [req.file] : undefined);
 
-    const data = await updateProductService({
-      productId: req.params.id as string,
-      userId: req.userId,
+    await updateProductService({
+      productId: req.params.productId as unknown as Types.ObjectId,
+      userId: req.userId!,
       payload: req.body,
       files,
     });
@@ -127,7 +148,6 @@ export const updateProductController = asyncHandler(
       statusCode: HTTP_STATUS.OK,
       success: true,
       message: API_MESSAGES.PRODUCT_UPDATED,
-      data,
     });
   },
 );
@@ -140,12 +160,17 @@ export const updateProductController = asyncHandler(
  */
 export const deleteProductController = asyncHandler(
   async (req: Request, res: Response) => {
-    await deleteProductService(req.params.id as string, req.userId);
+    const productId = req.params.productId;
+
+    await deleteProductService(
+      productId as unknown as Types.ObjectId,
+      req.userId!,
+    );
 
     logger.info(API_MESSAGES.PRODUCT_DELETED);
 
     sendResponse(res, {
-      statusCode: HTTP_STATUS.OK,
+      statusCode: HTTP_STATUS.NO_CONTENT,
       success: true,
       message: API_MESSAGES.PRODUCT_DELETED,
     });

@@ -82,7 +82,7 @@ router.get(
  * @route - /api/v1/product/:id
  */
 router.get(
-  "/:id",
+  "/:productId",
   validation(productIdSchema, "params"),
   getProductByIdController,
 );
@@ -94,7 +94,7 @@ router.get(
  * @route - /api/v1/product/:id
  */
 router.patch(
-  "/:id",
+  "/:productId",
   authenticate,
   authorize([UserRole.SELLER, UserRole.ADMIN]),
   fileUpload.array("images"),
@@ -110,9 +110,9 @@ router.patch(
  * @route - /api/v1/product/:id
  */
 router.delete(
-  "/:id",
+  "/:productId",
   authenticate,
-  authorize([UserRole.SELLER, UserRole.ADMIN]),
+  authorize([UserRole.SELLER]),
   validation(productIdSchema, "params"),
   deleteProductController,
 );

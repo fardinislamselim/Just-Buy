@@ -5,142 +5,101 @@
  */
 
 import { Types } from "mongoose";
-
-/**
- * Product Image Interface
- */
-export interface IProductImage {
-  publicId: string;
-  url: string;
-  width: number | null;
-  height: number | null;
-}
+import { IAvatar } from "../seller/seller.interface";
 
 /**
  * Product Interface
  */
-export interface IProduct {
-  _id?: Types.ObjectId;
-  seller: Types.ObjectId;
-  category: Types.ObjectId;
-  name: string;
-  description?: string;
-  price: number;
-  stockQuantity: number;
-  images: IProductImage[];
-  isFeatured: boolean;
-  createdAt?: string | Date;
-  updatedAt?: string | Date;
 
-  // Relational ERD Aliases
-  product_id?: Types.ObjectId;
-  seller_id?: Types.ObjectId;
-  category_id?: Types.ObjectId;
-  stock_quantity?: number;
-  is_featured?: boolean;
-  created_at?: string | Date;
-  updated_at?: string | Date;
+export enum Size {
+  S = "S",
+  M = "M",
+  L = "L",
+  XL = "XL",
+  XXL = "XXL",
 }
 
-/**
- * Populated Product Interface
- */
-export interface IPopulatedProduct extends Omit<
-  IProduct,
-  "seller" | "category"
-> {
+export interface IProduct {
+  _id: Types.ObjectId;
   seller: {
     _id: Types.ObjectId;
-    fullName?: string;
-    email?: string;
+    fullName: string;
+    email: string;
+    role: "seller";
   };
-  category: {
-    _id: Types.ObjectId;
-    name: string;
-    slug?: string;
-  };
+  name: string;
+  description: string;
+  category: string;
+  brand: string;
+  price: number;
+  stockQuantity: number;
+  sizes?: Size[];
+  images: IAvatar[];
 }
 
 /**
  * Create Product Payload
  */
-export interface ICreateProductPayload {
-  seller?: Types.ObjectId | string;
-  sellerId?: string;
-  category: Types.ObjectId | string;
-  categoryId?: string;
-  name: string;
-  description?: string;
-  price: number;
-  stockQuantity?: number;
-  stock_quantity?: number;
-  images?: IProductImage[];
-  isFeatured?: boolean;
-}
+export type CreateProduct = Pick<
+  IProduct,
+  | "name"
+  | "description"
+  | "category"
+  | "brand"
+  | "price"
+  | "stockQuantity"
+  | "sizes"
+  | "images"
+>;
 
 /**
  * Create Product Request
  */
 export interface ICreateProductRequest {
-  userId: Types.ObjectId;
-  payload: ICreateProductPayload;
+  sellerId: Types.ObjectId;
+  payload: CreateProduct;
   files?: Express.Multer.File[];
 }
 
-/**
- * Update Product Payload
- */
-export interface IUpdateProductPayload {
-  seller?: Types.ObjectId | string;
-  sellerId?: string;
-  seller_id?: string;
-  category?: Types.ObjectId | string;
-  categoryId?: string;
-  category_id?: string;
-  name?: string;
-  description?: string;
-  price?: number;
-  stockQuantity?: number;
-  stock_quantity?: number;
-  images?: IProductImage[];
-  isFeatured?: boolean;
-  is_featured?: boolean;
-}
-
-/**
- * Update Product Request
- */
-export interface IUpdateProductRequest {
-  productId: string;
-  userId?: Types.ObjectId;
-  payload: IUpdateProductPayload;
-  files?: Express.Multer.File[];
-}
-
-/**
- * Get Products Query Parameters
- */
 export interface IGetProductsQuery {
-  page?: number;
-  limit?: number;
-  search?: string;
   category?: string;
-  seller?: string;
-  isFeatured?: boolean;
-  minPrice?: number;
-  maxPrice?: number;
-  sortBy?: "name" | "price" | "stockQuantity" | "createdAt" | "updatedAt";
-  sortOrder?: "asc" | "desc";
+  name?: string;
+  price?: number;
+  search?: string;
+  limit?: number;
+  offset?: number;
 }
 
-/**
- * Paginated Products Result
- */
 export interface IGetProductsResult {
   products: IProduct[];
   total: number;
-  page: number;
   limit: number;
-  totalPages: number;
   skip: number;
+}
+
+/**
+ * Product ID
+ */
+export interface IProductId {
+  productId: Types.ObjectId;
+}
+
+export type UpdateProductPayload = Partial<
+  Pick<
+    IProduct,
+    | "name"
+    | "description"
+    | "category"
+    | "brand"
+    | "price"
+    | "stockQuantity"
+    | "sizes"
+  >
+>;
+
+export interface IUpdateProductRequest {
+  userId: Types.ObjectId;
+  productId: Types.ObjectId;
+  payload: UpdateProductPayload;
+  files?: Express.Multer.File[];
 }
