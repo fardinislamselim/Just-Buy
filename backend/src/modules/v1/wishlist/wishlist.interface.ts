@@ -16,3 +16,9 @@ export interface IWishlist {
   buyer: Types.ObjectId;
   products: Types.ObjectId[];
 }
+
+export interface IAddWishlistRequest {
+  buyerId: Types.ObjectId;
+  productId: Types.ObjectId;
+}
+
