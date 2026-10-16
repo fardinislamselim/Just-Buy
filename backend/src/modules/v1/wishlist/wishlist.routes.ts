@@ -29,7 +29,10 @@ import { UserRole } from "@/modules/v1/auth/auth.intarface";
  * Controllers
  */
 import { productIdSchema } from "../product/product.validation";
-import { addWishlistController } from "./wishlist.controller";
+import {
+  addWishlistController,
+  allWishlistController,
+} from "./wishlist.controller";
 
 /**
  * Router instance
@@ -48,6 +51,19 @@ router.post(
   authorize([UserRole.BUYER]),
   validation(productIdSchema, "params"),
   addWishlistController,
+);
+
+/**
+ * All Wishlist
+ * @access - Private (Buyer)
+ * @method - GET
+ * @route - /api/v1/wishlist/list
+ */
+router.get(
+  "/list",
+  authenticate,
+  authorize([UserRole.BUYER]),
+  allWishlistController,
 );
 
 /**

@@ -20,7 +20,10 @@ import sendResponse from "@/utils/sendResponse";
 /**
  * Services
  */
-import { addWishlistService } from "@/modules/v1/wishlist/wishlist.service";
+import {
+  addWishlistService,
+  getAllWishlistsService,
+} from "@/modules/v1/wishlist/wishlist.service";
 
 /**
  * Type
@@ -48,6 +51,20 @@ export const addWishlistController = asyncHandler(
       statusCode: HTTP_STATUS.OK,
       success: true,
       message: API_MESSAGES.WISHLIST_ITEM_ADDED,
+    });
+  },
+);
+
+export const allWishlistController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const buyerId = req.userId!;
+
+    const result = await getAllWishlistsService(buyerId);
+
+    sendResponse(res, {
+      statusCode: HTTP_STATUS.OK,
+      success: true,
+      data: result,
     });
   },
 );

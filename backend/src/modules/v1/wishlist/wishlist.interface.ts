@@ -10,6 +10,11 @@
 import { Types } from "mongoose";
 
 /**
+ * Type
+ */
+import type { IAvatar } from "@/modules/v1/seller/seller.interface";
+
+/**
  * Wishlist Interface Definition
  */
 export interface IWishlist {
@@ -22,3 +27,25 @@ export interface IAddWishlistRequest {
   productId: Types.ObjectId;
 }
 
+export type BuyerId = IWishlist["buyer"];
+
+/**
+ * Populated Product inside Wishlist
+ */
+export interface IWishlistProduct {
+  _id: Types.ObjectId;
+  name: string;
+  price: number;
+  images: IAvatar[];
+}
+
+/**
+ * Wishlist Response with Populated Products
+ */
+export interface IWishlistResponse {
+  _id: Types.ObjectId;
+  buyer: Types.ObjectId;
+  products: IWishlistProduct[];
+  createdAt: Date | string;
+  updatedAt: Date | string;
+}

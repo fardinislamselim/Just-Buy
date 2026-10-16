@@ -16,7 +16,11 @@ import { API_MESSAGES, ERROR_CODE, HTTP_STATUS } from "@/utils/constants";
 /**
  * Type
  */
-import type { IAddWishlistRequest } from "@/modules/v1/wishlist/wishlist.interface";
+import type {
+  BuyerId,
+  IAddWishlistRequest,
+  IWishlistResponse,
+} from "@/modules/v1/wishlist/wishlist.interface";
 
 /**
  * Add Product to Wishlist
@@ -74,4 +78,22 @@ export const addWishlistService = async ({
       setDefaultsOnInsert: true,
     },
   );
+};
+
+/**
+ * Get all wishlists service
+ * @param {BuyerId} buyerId - Buyer ID
+ * @returns {Promise<IWishlistResponse | null>}
+ */
+export const getAllWishlistsService = async (
+  buyerId: BuyerId,
+): Promise<IWishlistResponse | null> => {
+  const wishlist = await Wishlist.findOne({
+    buyer: buyerId,
+  })
+    .populate("products", "name images price")
+    .lean()
+    .exec();
+
+  return wishlist;
 };
