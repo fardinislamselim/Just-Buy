@@ -23,14 +23,6 @@ const productSchema = new Schema<IProduct>(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: [true, "Seller is required"],
-      alias: "seller_id",
-    },
-
-    category: {
-      type: Schema.Types.ObjectId,
-      ref: "Category",
-      required: [true, "Category is required"],
-      alias: "category_id",
     },
 
     name: {
@@ -43,8 +35,19 @@ const productSchema = new Schema<IProduct>(
 
     description: {
       type: String,
+      required: [true, "Description is required"],
       trim: true,
-      default: "",
+    },
+
+    category: {
+      type: String,
+      required: [true, "Category is required"],
+    },
+
+    brand: {
+      type: String,
+      required: [true, "Brand is required"],
+      trim: true,
     },
 
     price: {
@@ -57,7 +60,17 @@ const productSchema = new Schema<IProduct>(
       type: Number,
       default: 0,
       min: [0, "Stock quantity cannot be negative"],
-      alias: "stock_quantity",
+    },
+
+    sizes: {
+      type: [
+        {
+          type: String,
+          enum: ["S", "M", "L", "XL", "XXL"],
+          trim: true,
+        },
+      ],
+      default: [],
     },
 
     images: {
@@ -84,49 +97,12 @@ const productSchema = new Schema<IProduct>(
       ],
       default: [],
     },
-
-    isFeatured: {
-      type: Boolean,
-      default: false,
-      alias: "is_featured",
-    },
   },
   {
     timestamps: true,
     versionKey: false,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
   },
 );
-
-/**
- * Virtual fields to support relational ERD naming conventions
- */
-productSchema.virtual("product_id").get(function () {
-  return this._id;
-});
-
-productSchema.virtual("productId").get(function () {
-  return this._id;
-});
-
-productSchema.virtual("created_at").get(function () {
-  return this.createdAt;
-});
-
-productSchema.virtual("updated_at").get(function () {
-  return this.updatedAt;
-});
-
-/**
- * Indexes for query performance
- */
-productSchema.index({ seller: 1 });
-productSchema.index({ category: 1 });
-productSchema.index({ name: 1 });
-productSchema.index({ isFeatured: 1 });
-productSchema.index({ price: 1 });
-productSchema.index({ createdAt: -1 });
 
 /**
  * Product Model Definition

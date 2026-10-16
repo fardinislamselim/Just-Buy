@@ -22,7 +22,7 @@ const categorySchema = new Schema<ICategory>(
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: [true, "Category creator is required"],
     },
     name: {
       type: String,
