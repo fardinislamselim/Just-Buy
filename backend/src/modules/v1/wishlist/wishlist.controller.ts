@@ -23,6 +23,7 @@ import sendResponse from "@/utils/sendResponse";
 import {
   addWishlistService,
   getAllWishlistsService,
+  removeWishlistService,
 } from "@/modules/v1/wishlist/wishlist.service";
 
 /**
@@ -65,6 +66,29 @@ export const allWishlistController = asyncHandler(
       statusCode: HTTP_STATUS.OK,
       success: true,
       data: result,
+    });
+  },
+);
+
+export const removeWishlistController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { productId } = req.params;
+    const buyerId = req.userId!;
+
+    await removeWishlistService({
+      buyerId,
+      productId: productId as unknown as Types.ObjectId,
+    });
+
+    logger.info("Wishlist item removed", {
+      buyerId,
+      productId,
+    });
+
+    sendResponse(res, {
+      statusCode: HTTP_STATUS.OK,
+      success: true,
+      message: API_MESSAGES.WISHLIST_ITEM_REMOVED,
     });
   },
 );

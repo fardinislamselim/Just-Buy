@@ -97,3 +97,41 @@ export const getAllWishlistsService = async (
 
   return wishlist;
 };
+
+export const removeWishlistService = async ({
+  buyerId,
+  productId,
+}: IAddWishlistRequest): Promise<void> => {
+  // heck whether the product is already wishlisted
+  const isWished = await Wishlist.exists({
+    buyer: buyerId,
+    products: productId,
+  });
+
+  if (!isWished) {
+    logger.warn("Product not found in wishlist", {
+      buyerId,
+      productId,
+    });
+
+    throw new AppError(
+      HTTP_STATUS.NOT_FOUND,
+      ERROR_CODE.WISHLIST_NOT_FOUND,
+      API_MESSAGES.WISHLIST_ITEM_NOT_FOUND,
+    );
+  }
+
+  // Remove the product from the buyer's wishlist
+  await Wishlist.findOneAndUpdate(
+    { buyer: buyerId },
+    {
+      $pull: {
+        products: productId,
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+};

@@ -31,7 +31,7 @@ import { UserRole } from "@/modules/v1/auth/auth.intarface";
 import { productIdSchema } from "../product/product.validation";
 import {
   addWishlistController,
-  allWishlistController,
+  removeWishlistController,
 } from "./wishlist.controller";
 
 /**
@@ -59,11 +59,12 @@ router.post(
  * @method - GET
  * @route - /api/v1/wishlist/list
  */
-router.get(
-  "/list",
+router.delete(
+  "/:productId",
   authenticate,
   authorize([UserRole.BUYER]),
-  allWishlistController,
+  validation(productIdSchema, "params"),
+  removeWishlistController,
 );
 
 /**
