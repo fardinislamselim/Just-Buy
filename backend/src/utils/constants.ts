@@ -107,6 +107,7 @@ export const ERROR_CODE = {
   // Wishlist
   WISHLIST_NOT_FOUND: "WISHLIST_NOT_FOUND",
   WISHLIST_ITEM_NOT_FOUND: "WISHLIST_ITEM_NOT_FOUND",
+  PRODUCT_ALREADY_WISHED: "PRODUCT_ALREADY_WISHED",
 
   // Order
   ORDER_NOT_FOUND: "ORDER_NOT_FOUND",
@@ -272,6 +273,7 @@ export const API_MESSAGES = {
   WISHLIST_ITEM_ADDED: "Item added to wishlist successfully",
   WISHLIST_ITEM_REMOVED: "Item removed from wishlist successfully",
   WISHLIST_ITEM_NOT_FOUND: "Wishlist item not found",
+  PRODUCT_ALREADY_WISHED: "Product already in wishlist",
 
   // Order
   ORDER_CREATED: "Order placed successfully",

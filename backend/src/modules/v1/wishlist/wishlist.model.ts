@@ -5,7 +5,7 @@
  */
 
 /**
- * Thired-party Modules
+ * Third-party Modules
  */
 import { model, models, Schema } from "mongoose";
 
@@ -15,7 +15,7 @@ import { model, models, Schema } from "mongoose";
 import type { IWishlist } from "@/modules/v1/wishlist/wishlist.interface";
 
 /**
- * Buyer Schema Definition
+ * Wishlist Schema Definition
  */
 const wishlistSchema = new Schema<IWishlist>(
   {
