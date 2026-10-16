@@ -5,7 +5,7 @@
  */
 
 /**
- * Third-party Modules
+ * Third-party Module
  */
 import { Types } from "mongoose";
 
@@ -31,7 +31,7 @@ import {
  */
 import type { Request, Response } from "express";
 /**
- * Add Product to Wishlist Controller
+ * Controller for adding a product to the wishlist
  */
 export const addWishlistController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -56,6 +56,9 @@ export const addWishlistController = asyncHandler(
   },
 );
 
+/**
+ * Controller for getting all wishlist items
+ */
 export const allWishlistController = asyncHandler(
   async (req: Request, res: Response) => {
     const buyerId = req.userId!;
@@ -70,6 +73,9 @@ export const allWishlistController = asyncHandler(
   },
 );
 
+/**
+ * Controller for removing a product from the wishlist
+ */
 export const removeWishlistController = asyncHandler(
   async (req: Request, res: Response) => {
     const { productId } = req.params;

@@ -23,13 +23,16 @@ import type {
 } from "@/modules/v1/wishlist/wishlist.interface";
 
 /**
- * Add Product to Wishlist
+ * Service for adding a product to the wishlist
+ * @param {BuyerId} buyerId - Buyer ID
+ * @param {ProductId} productId - Product ID
+ * @returns {Promise<void>}
  */
 export const addWishlistService = async ({
   buyerId,
   productId,
 }: IAddWishlistRequest): Promise<void> => {
-  //Check whether the product exists
+  // Check whether the product exists
   const productExists = await Product.exists({
     _id: productId,
   });
@@ -44,7 +47,7 @@ export const addWishlistService = async ({
     );
   }
 
-  // heck whether the product is already wishlisted
+  // Check whether the product is already wishlisted
   const isWished = await Wishlist.exists({
     buyer: buyerId,
     products: productId,
@@ -81,13 +84,14 @@ export const addWishlistService = async ({
 };
 
 /**
- * Get all wishlists service
+ * Service for getting all wishlist items
  * @param {BuyerId} buyerId - Buyer ID
- * @returns {Promise<IWishlistResponse | null>}
+ * @returns {Promise<IWishlistResponse>}
  */
 export const getAllWishlistsService = async (
   buyerId: BuyerId,
-): Promise<IWishlistResponse | null> => {
+): Promise<IWishlistResponse> => {
+  // Find the buyer's wishlist and populate products
   const wishlist = await Wishlist.findOne({
     buyer: buyerId,
   })
@@ -98,6 +102,12 @@ export const getAllWishlistsService = async (
   return wishlist;
 };
 
+/**
+ * Service for removing a product from the wishlist
+ * @param {BuyerId} buyerId - Buyer ID
+ * @param {ProductId} productId - Product ID
+ * @returns {Promise<void>}
+ */
 export const removeWishlistService = async ({
   buyerId,
   productId,

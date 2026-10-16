@@ -17,22 +17,22 @@ import authorize from "@/middlewares/authorize";
 import validation from "@/middlewares/validation";
 
 /**
- * Roles & Types
+ * Type
  */
 import { UserRole } from "@/modules/v1/auth/auth.intarface";
 
 /**
- * Validations
+ * Validation
  */
+import { productIdSchema } from "@/modules/v1/product/product.validation";
 
 /**
- * Controllers
+ * API Controllers
  */
-import { productIdSchema } from "../product/product.validation";
 import {
   addWishlistController,
   removeWishlistController,
-} from "./wishlist.controller";
+} from "@/modules/v1/wishlist/wishlist.controller";
 
 /**
  * Router instance
@@ -41,7 +41,7 @@ const router = Router();
 
 /**
  * Add Wishlist
- * @access - Private (Buyer)
+ * @access - Private
  * @method - POST
  * @route - /api/v1/wishlist/:productId
  */
@@ -54,8 +54,8 @@ router.post(
 );
 
 /**
- * All Wishlist
- * @access - Private (Buyer)
+ * Get All Wishlist
+ * @access - Private
  * @method - GET
  * @route - /api/v1/wishlist/list
  */
@@ -67,7 +67,4 @@ router.delete(
   removeWishlistController,
 );
 
-/**
- * Export router
- */
 export default router;
