@@ -53,7 +53,7 @@ export function BrowseByCategory() {
           return (
             <Link
               key={category._id || category.id || category.name}
-              href={`#category-${category._id || category.id || encodeURIComponent(category.name)}`}
+              href={`/products?category=${encodeURIComponent(category.name)}`}
               className="group flex-shrink-0 w-[140px] sm:w-[175px] lg:w-[195px] flex flex-col items-center justify-center p-4 sm:p-6 bg-[#F5F6F8] rounded-lg border border-neutral-200/50 hover:border-[#FF5A0A] hover:bg-white hover:shadow-md transition-all duration-200"
             >
               {/* Category Image */}

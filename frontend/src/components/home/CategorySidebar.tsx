@@ -37,7 +37,7 @@ export function CategorySidebar({
             return (
               <Link
                 key={cat._id || cat.id || index}
-                href={`#category-${cat._id || cat.id || encodeURIComponent(cat.name)}`}
+                href={`/products?category=${encodeURIComponent(cat.name)}`}
                 onClick={(e) => {
                   if (onSelectCategory) {
                     e.preventDefault();

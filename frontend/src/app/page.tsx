@@ -16,7 +16,7 @@ import { ExploreProducts } from "@/components/home/ExploreProducts";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-white text-neutral-900 font-sans selection:bg-[#FF5A0A]/20 selection:text-[#FF5A0A]">
+    <div className="min-h-screen flex flex-col bg-white text-neutral-900 font-sans selection:bg-brand-orange/20 selection:text-brand-orange">
       {/* Top Navigation Bar */}
       <Navbar />
 

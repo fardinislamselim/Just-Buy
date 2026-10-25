@@ -6,11 +6,13 @@
  * @license Apache-2.0
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 import { Search, Heart, ShoppingCart, User, Menu, X } from "lucide-react";
 import { Container } from "./Container";
+import { cn } from "@/lib/utils";
 
 interface NavbarProps {
   cartCount?: number;
@@ -18,19 +20,48 @@ interface NavbarProps {
 }
 
 export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [internalCartCount, setInternalCartCount] = useState(cartCount);
+  const [internalWishlistCount, setInternalWishlistCount] = useState(wishlistCount);
+
+  useEffect(() => {
+    const updateCounts = () => {
+      try {
+        const savedCart = localStorage.getItem("jusbuy_cart_count");
+        if (savedCart) setInternalCartCount(parseInt(savedCart, 10) || 0);
+        const savedWishlist = localStorage.getItem("jusbuy_wishlist");
+        if (savedWishlist) {
+          const parsed = JSON.parse(savedWishlist);
+          setInternalWishlistCount(Array.isArray(parsed) ? parsed.length : 0);
+        }
+      } catch {}
+    };
+    updateCounts();
+    window.addEventListener("storage", updateCounts);
+    window.addEventListener("cart_updated", updateCounts);
+    return () => {
+      window.removeEventListener("storage", updateCounts);
+      window.removeEventListener("cart_updated", updateCounts);
+    };
+  }, []);
+
+  const effectiveCartCount = cartCount || internalCartCount;
+  const effectiveWishlistCount = wishlistCount || internalWishlistCount;
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Smooth scroll to explore section or search feedback
-      const section = document.getElementById("explore-products");
-      if (section) {
-        section.scrollIntoView({ behavior: "smooth" });
-      }
+      router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      router.push("/products");
     }
   };
+
+  const isHome = pathname === "/";
+  const isProducts = pathname.startsWith("/products") || pathname.startsWith("/product");
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-neutral-200/80 transition-shadow">
@@ -54,7 +85,12 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
           <nav className="hidden md:flex items-center space-x-10 text-[15px] font-normal text-neutral-800">
             <Link
               href="/"
-              className="text-neutral-900 font-medium relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-[#FF5A0A]"
+              className={cn(
+                "transition-colors",
+                isHome
+                  ? "text-neutral-900 font-medium relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-[#FF5A0A]"
+                  : "text-neutral-700 hover:text-[#FF5A0A]",
+              )}
             >
               Home
             </Link>
@@ -102,9 +138,9 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
               className="relative p-2 text-neutral-800 hover:text-[#FF5A0A] transition-colors rounded-full hover:bg-neutral-100"
             >
               <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
-              {wishlistCount > 0 && (
+              {effectiveWishlistCount > 0 && (
                 <span className="absolute top-1 right-1 bg-[#FF5A0A] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                  {wishlistCount}
+                  {effectiveWishlistCount}
                 </span>
               )}
             </Link>
@@ -116,9 +152,9 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
               className="relative p-2 text-neutral-800 hover:text-[#FF5A0A] transition-colors rounded-full hover:bg-neutral-100"
             >
               <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
-              {cartCount > 0 && (
+              {effectiveCartCount > 0 && (
                 <span className="absolute top-1 right-1 bg-[#FF5A0A] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
-                  {cartCount}
+                  {effectiveCartCount}
                 </span>
               )}
             </Link>
