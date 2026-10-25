@@ -18,7 +18,16 @@ export interface ProductSeller {
   role?: "seller" | "admin";
 }
 
-export type ProductSize = "S" | "M" | "L" | "XL" | "XXL";
+export type ProductSize = "XS" | "S" | "M" | "L" | "XL" | "XXL";
+
+export interface ProductReview {
+  id: string;
+  author: string;
+  avatar?: string;
+  rating: number;
+  date: string;
+  comment: string;
+}
 
 export interface Product {
   _id?: string;

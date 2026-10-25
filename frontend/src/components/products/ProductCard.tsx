@@ -8,6 +8,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Heart, Star, ShoppingBag, Check } from "lucide-react";
 import type { Product } from "@/types";
 import { cn } from "@/lib/utils";
@@ -33,6 +34,8 @@ export function ProductCard({
   const [isAdded, setIsAdded] = useState(false);
 
   const isFavorited = externalWishlisted !== undefined ? externalWishlisted : internalWishlist;
+  const productId = String(product._id || product.id || "volcom-mens-crisp-stone");
+  const productHref = `/products/${productId}`;
 
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -107,8 +110,11 @@ export function ProductCard({
           />
         </button>
 
-        {/* Product Image */}
-        <div className="relative w-full h-full flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+        {/* Product Image Link */}
+        <Link
+          href={productHref}
+          className="relative w-full h-full flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
+        >
           <Image
             src={
               product.image ||
@@ -123,7 +129,7 @@ export function ProductCard({
             priority={false}
             unoptimized
           />
-        </div>
+        </Link>
 
         {/* Add to Cart Bar / Button */}
         <div
@@ -160,12 +166,14 @@ export function ProductCard({
       {/* Product Details Area Below Image */}
       <div className="pt-3 flex flex-col space-y-1">
         {/* Product Name */}
-        <h3
-          title={product.name}
-          className="text-sm sm:text-base font-semibold text-neutral-900 truncate group-hover:text-brand-orange transition-colors"
-        >
-          {product.name}
-        </h3>
+        <Link href={productHref} className="block">
+          <h3
+            title={product.name}
+            className="text-sm sm:text-base font-semibold text-neutral-900 truncate group-hover:text-brand-orange transition-colors"
+          >
+            {product.name}
+          </h3>
+        </Link>
 
         {/* Price */}
         <div className="flex items-center space-x-2">

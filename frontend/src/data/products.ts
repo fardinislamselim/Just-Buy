@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import type { Product } from "@/types";
+import type { Product, ProductReview } from "@/types";
 
 /**
  * Products for the "New Arrival" section (4 cards)
@@ -856,7 +856,162 @@ export const catalogProducts: Product[] = [
 ];
 
 /**
+ * Volcom Men's Crisp Stone - Hero product for product details page
+ */
+export const volcomProduct: Product = {
+  _id: "660c201e8b4e2a1b9c3d4f99",
+  id: "volcom-mens-crisp-stone",
+  name: "Volcom Men's Crisp Stone",
+  description:
+    "PlayStation 5 Controller with high quality grip with textured handles for easy hold/action for all 4 types of in-game pressure sensitive controls.",
+  category: "Men's Fashion",
+  brand: "Game Haven",
+  price: 192,
+  originalPrice: 240,
+  stockQuantity: 42,
+  inStock: true,
+  sizes: ["XS", "S", "M", "L", "XL"],
+  images: [
+    { publicId: "products/volcom-1", url: "/images/products/volcom-mens-crisp-stone-1.jpg" },
+    { publicId: "products/volcom-2", url: "/images/products/volcom-mens-crisp-stone-2.jpg" },
+    { publicId: "products/volcom-3", url: "/images/products/volcom-mens-crisp-stone-3.jpg" },
+    { publicId: "products/volcom-4", url: "/images/products/volcom-mens-crisp-stone-4.jpg" },
+  ],
+  image: "/images/products/volcom-mens-crisp-stone-1.jpg",
+  seller: {
+    _id: "660c1f2e8b4e2a1b9c3d4e88",
+    fullName: "Game Haven",
+    email: "contact@gamehaven.com",
+    role: "seller",
+  },
+  rating: 5,
+  reviewCount: 150,
+};
+
+/**
+ * Related Items matching the screenshot
+ */
+export const relatedProducts: Product[] = [
+  {
+    _id: "660c201e8b4e2a1b9c3d4f81",
+    id: "havit-hv-g92",
+    name: "HAVIT HV-G92 Gamepad",
+    description: "Ergonomic wired/wireless dual-shock gamepad controller with precision analog thumbsticks.",
+    category: "Electronics",
+    brand: "HAVIT",
+    price: 120,
+    originalPrice: 160,
+    stockQuantity: 35,
+    images: [{ publicId: "products/gp11-shooter-usb-gamepad", url: "/images/products/gp11-shooter-usb-gamepad.svg" }],
+    image: "/images/products/gp11-shooter-usb-gamepad.svg",
+    rating: 5,
+    reviewCount: 88,
+    discountPercent: 25,
+  },
+  {
+    _id: "660c201e8b4e2a1b9c3d4f82",
+    id: "ak-900-keyboard",
+    name: "AK-900 Wired Keyboard",
+    description: "Mechanical feel gaming keyboard with brilliant RGB multi-color backlighting and water-resistant design.",
+    category: "Electronics",
+    brand: "AK-Gaming",
+    price: 960,
+    originalPrice: 1160,
+    stockQuantity: 20,
+    images: [{ publicId: "products/ak900-keyboard", url: "/images/products/ak900-keyboard.svg" }],
+    image: "/images/products/ak900-keyboard.svg",
+    rating: 4,
+    reviewCount: 75,
+    discountPercent: 17,
+  },
+  {
+    _id: "660c201e8b4e2a1b9c3d4f83",
+    id: "ips-lcd-gaming-monitor",
+    name: "IPS LCD Gaming Monitor",
+    description: "Ultra-wide 165Hz IPS gaming display with FreeSync Premium and HDR vibrant color accuracy.",
+    category: "Electronics",
+    brand: "MSI",
+    price: 370,
+    originalPrice: 400,
+    stockQuantity: 15,
+    images: [{ publicId: "products/ips-gaming-monitor", url: "/images/products/ips-gaming-monitor.svg" }],
+    image: "/images/products/ips-gaming-monitor.svg",
+    rating: 5,
+    reviewCount: 99,
+    discountPercent: 8,
+  },
+  {
+    _id: "660c201e8b4e2a1b9c3d4f03",
+    id: "na-3",
+    name: "RGB Liquid CPU Cooler",
+    description: "All-in-one high-performance liquid CPU cooler with customizable RGB lighting and dual fans.",
+    category: "Electronics",
+    brand: "Cooler Master",
+    price: 160,
+    originalPrice: 170,
+    stockQuantity: 40,
+    images: [{ publicId: "products/rgb-liquid-cpu-cooler", url: "/images/products/rgb-liquid-cpu-cooler.svg" }],
+    image: "/images/products/rgb-liquid-cpu-cooler.svg",
+    rating: 4.5,
+    reviewCount: 65,
+    discountPercent: 6,
+  },
+];
+
+/**
+ * Sample Customer Reviews matching screenshot
+ */
+export const sampleProductReviews: ProductReview[] = [
+  {
+    id: "rev-1",
+    author: "Dianne Russell",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80",
+    rating: 5,
+    date: "Just now",
+    comment:
+      "The controller delivers exceptional performance with low latency and responsive controls. The buttons and analog sticks are precise, making it ideal for both casual and competitive gaming. The D-pad is also a significant improvement, offering better accuracy and tactile feedback.",
+  },
+  {
+    id: "rev-2",
+    author: "Dianne Russell",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+    rating: 5,
+    date: "Just now",
+    comment:
+      "The controller delivers exceptional performance with low latency and responsive controls. The buttons and analog sticks are precise, making it ideal for both casual and competitive gaming. The D-pad is also a significant improvement, offering better accuracy and tactile feedback.",
+  },
+  {
+    id: "rev-3",
+    author: "Dianne Russell",
+    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80",
+    rating: 5,
+    date: "Just now",
+    comment:
+      "The controller delivers exceptional performance with low latency and responsive controls. The buttons and analog sticks are precise, making it ideal for both casual and competitive gaming. The D-pad is also a significant improvement, offering better accuracy and tactile feedback.",
+  },
+  {
+    id: "rev-4",
+    author: "Dianne Russell",
+    avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=120&auto=format&fit=crop&q=80",
+    rating: 5,
+    date: "Just now",
+    comment:
+      "The controller delivers exceptional performance with low latency and responsive controls. The buttons and analog sticks are precise, making it ideal for both casual and competitive gaming. The D-pad is also a significant improvement, offering better accuracy and tactile feedback.",
+  },
+  {
+    id: "rev-5",
+    author: "Dianne Russell",
+    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&auto=format&fit=crop&q=80",
+    rating: 5,
+    date: "Just now",
+    comment:
+      "The controller delivers exceptional performance with low latency and responsive controls. The buttons and analog sticks are precise, making it ideal for both casual and competitive gaming. The D-pad is also a significant improvement, offering better accuracy and tactile feedback.",
+  },
+];
+
+/**
  * All combined products for search / filter utility
  */
-export const allProducts: Product[] = catalogProducts;
+export const allProducts: Product[] = [volcomProduct, ...relatedProducts, ...catalogProducts];
+
 
