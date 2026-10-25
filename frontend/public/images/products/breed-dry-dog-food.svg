@@ -1,0 +1,15 @@
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#F5F6F8"/>
+  <path d="M85 70 L215 70 L225 240 L75 240 Z" fill="#4C1D95" rx="8"/>
+  <path d="M85 70 L150 85 L215 70" stroke="#FBBF24" stroke-width="4" fill="none"/>
+  <rect x="105" y="95" width="90" height="30" rx="5" fill="#FBBF24"/>
+  <text x="150" y="116" font-family="sans-serif" font-weight="900" font-size="16" fill="#4C1D95" text-anchor="middle">Cesar</text>
+  <circle cx="150" cy="155" r="28" fill="#FFFFFF"/>
+  <circle cx="140" cy="150" r="3" fill="#000000"/>
+  <circle cx="160" cy="150" r="3" fill="#000000"/>
+  <ellipse cx="150" cy="162" rx="5" ry="4" fill="#000000"/>
+  <ellipse cx="150" cy="210" rx="40" ry="14" fill="#EA580C"/>
+  <circle cx="138" cy="208" r="4" fill="#78350F"/>
+  <circle cx="150" cy="206" r="4" fill="#78350F"/>
+  <circle cx="162" cy="208" r="4" fill="#78350F"/>
+</svg>

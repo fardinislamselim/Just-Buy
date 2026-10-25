@@ -1,0 +1,20 @@
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="300" height="300" fill="#F5F6F8"/>
+    <!-- Red Miniature Sports Car (Mercedes style) -->
+    <!-- Wheels -->
+    <circle cx="95" cy="210" r="26" fill="#18181B" stroke="#71717A" stroke-width="6"/>
+    <circle cx="215" cy="210" r="26" fill="#18181B" stroke="#71717A" stroke-width="6"/>
+    <circle cx="95" cy="210" r="10" fill="#E2E8F0"/>
+    <circle cx="215" cy="210" r="10" fill="#E2E8F0"/>
+    <!-- Car Body -->
+    <path d="M60 180 C60 170 70 160 90 155 L125 150 L140 120 L195 120 L210 150 L245 155 C255 160 260 170 260 185 L260 205 L60 205 Z" fill="#DC2626"/>
+    <!-- Windshield -->
+    <polygon points="135,150 145,125 190,125 198,150" fill="#38BDF8" fill-opacity="0.7"/>
+    <!-- Steering Wheel -->
+    <ellipse cx="170" cy="138" rx="8" ry="12" fill="#09090B"/>
+    <!-- Headlights -->
+    <polygon points="62,175 75,170 75,185 62,185" fill="#FEF08A"/>
+    <!-- Grille & Badge -->
+    <rect x="60" y="185" width="12" height="15" fill="#18181B"/>
+    <circle cx="66" cy="192" r="3" fill="#E2E8F0"/>
+  </svg>

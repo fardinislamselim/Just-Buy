@@ -1,0 +1,23 @@
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="300" height="300" fill="#F5F6F8"/>
+    <!-- Luxury Duffle Bag (Brown patterned barrel bag) -->
+    <!-- Handles -->
+    <path d="M110 130 C110 70 145 70 145 130" stroke="#451A03" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <path d="M155 130 C155 70 190 70 190 130" stroke="#451A03" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <!-- Main Body -->
+    <rect x="50" y="125" width="200" height="105" rx="20" fill="#A16207"/>
+    <!-- Signature Monogram/Pattern Texture -->
+    <pattern id="gucci-pat" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="3" fill="#78350F"/>
+    </pattern>
+    <rect x="50" y="125" width="200" height="105" rx="20" fill="url(#gucci-pat)" fill-opacity="0.3"/>
+    <!-- Iconic Center Stripe (Green-Red-Green) -->
+    <rect x="135" y="125" width="30" height="105" fill="#15803D"/>
+    <rect x="144" y="125" width="12" height="105" fill="#DC2626"/>
+    <!-- Leather Corner Trims -->
+    <path d="M50 150 C50 130 65 125 80 125 L80 230 C65 230 50 225 50 205 Z" fill="#451A03"/>
+    <path d="M250 150 C250 130 235 125 220 125 L220 230 C235 230 250 225 250 205 Z" fill="#451A03"/>
+    <!-- Metal Gold Rivets -->
+    <circle cx="108" cy="142" r="5" fill="#FBBF24"/>
+    <circle cx="192" cy="142" r="5" fill="#FBBF24"/>
+  </svg>

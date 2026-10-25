@@ -1,0 +1,12 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" rx="12" fill="#F5F6F8"/>
+    <!-- American Football -->
+    <ellipse cx="85" cy="115" rx="38" ry="24" transform="rotate(-25 85 115)" fill="#B45309"/>
+    <path d="M60 125 L110 102 M75 110 L78 116 M85 106 L88 112 M95 101 L98 107" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+    <!-- Basketball -->
+    <circle cx="132" cy="100" r="28" fill="#EA580C"/>
+    <path d="M104 100 H160 M132 72 V128 M112 80 C125 92 125 108 112 120 M152 80 C139 92 139 108 152 120" stroke="#000000" stroke-width="2" stroke-opacity="0.4" fill="none"/>
+    <!-- Tennis/Cricket Ball -->
+    <circle cx="145" cy="148" r="14" fill="#84CC16"/>
+    <path d="M136 140 C146 142 146 154 136 156" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+  </svg>

@@ -1,0 +1,15 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" rx="12" fill="#F5F6F8"/>
+    <!-- Cozy Armchair -->
+    <rect x="65" y="90" width="70" height="55" rx="12" fill="#0D9488"/>
+    <rect x="52" y="105" width="16" height="40" rx="8" fill="#14B8A6"/>
+    <rect x="132" y="105" width="16" height="40" rx="8" fill="#14B8A6"/>
+    <!-- Cushion -->
+    <rect x="74" y="112" width="52" height="30" rx="6" fill="#CCFBF1"/>
+    <!-- Wooden Legs -->
+    <path d="M68 145 L62 170 M132 145 L138 170" stroke="#78350F" stroke-width="5" stroke-linecap="round"/>
+    <!-- Floor Lamp -->
+    <path d="M155 60 L145 90 H165 Z" fill="#F59E0B"/>
+    <line x1="155" y1="90" x2="155" y2="168" stroke="#475569" stroke-width="3"/>
+    <ellipse cx="155" cy="168" rx="12" ry="3" fill="#334155"/>
+  </svg>

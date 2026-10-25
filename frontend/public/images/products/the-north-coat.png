@@ -1,0 +1,23 @@
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="300" height="300" fill="#F5F6F8"/>
+    <!-- Winter Puffer Coat (Pinkish Red like reference) -->
+    <!-- Hood -->
+    <path d="M110 80 C110 50 190 50 190 80 C190 95 180 105 150 105 C120 105 110 95 110 80 Z" fill="#E11D48"/>
+    <!-- Fur trim / inner -->
+    <path d="M125 78 C125 65 175 65 175 78 C175 90 125 90 125 78 Z" fill="#BE123C"/>
+    <!-- Torso -->
+    <path d="M95 95 L205 95 L220 230 L80 230 Z" fill="#F43F5E" rx="10"/>
+    <!-- Sleeves -->
+    <path d="M95 95 L55 190 L85 195 L110 120 Z" fill="#E11D48"/>
+    <path d="M205 95 L245 190 L215 195 L190 120 Z" fill="#E11D48"/>
+    <!-- Horizontal Puffer Quilting Lines -->
+    <line x1="88" y1="130" x2="212" y2="130" stroke="#BE123C" stroke-width="3" stroke-linecap="round"/>
+    <line x1="84" y1="165" x2="216" y2="165" stroke="#BE123C" stroke-width="3" stroke-linecap="round"/>
+    <line x1="82" y1="200" x2="218" y2="200" stroke="#BE123C" stroke-width="3" stroke-linecap="round"/>
+    <!-- Center Zip -->
+    <line x1="150" y1="95" x2="150" y2="230" stroke="#9F1239" stroke-width="3"/>
+    <circle cx="150" cy="115" r="4" fill="#FDE047"/>
+    <!-- Pockets -->
+    <rect x="98" y="175" width="30" height="28" rx="4" fill="#BE123C"/>
+    <rect x="172" y="175" width="30" height="28" rx="4" fill="#BE123C"/>
+  </svg>

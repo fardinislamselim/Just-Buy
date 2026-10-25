@@ -1,0 +1,18 @@
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="300" height="300" fill="#F5F6F8"/>
+    <!-- Mid-century Wood Small Bookshelf / Side Table -->
+    <!-- Angled Legs -->
+    <path d="M95 190 L75 250 M195 190 L215 250 M110 190 L95 245 M180 190 L195 245" stroke="#78350F" stroke-width="8" stroke-linecap="round"/>
+    <!-- Main Box Cabinet -->
+    <rect x="85" y="85" width="130" height="115" rx="8" fill="#D97706" stroke="#B45309" stroke-width="4"/>
+    <!-- Shelf Divider -->
+    <rect x="85" y="138" width="130" height="6" fill="#B45309"/>
+    <!-- Books on Shelf -->
+    <rect x="98" y="144" width="12" height="45" rx="2" fill="#2563EB"/>
+    <rect x="112" y="148" width="14" height="41" rx="2" fill="#DC2626"/>
+    <rect x="128" y="142" width="10" height="47" rx="2" fill="#16A34A"/>
+    <rect x="140" y="152" width="15" height="37" rx="2" fill="#9333EA" transform="rotate(12 140 152)"/>
+    <!-- Plant / Decor on top -->
+    <rect x="135" y="65" width="22" height="20" rx="3" fill="#E2E8F0"/>
+    <circle cx="146" cy="55" r="10" fill="#15803D"/>
+  </svg>

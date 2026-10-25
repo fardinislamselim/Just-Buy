@@ -1,0 +1,9 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" rx="12" fill="#F5F6F8"/>
+    <!-- First Aid Box -->
+    <rect x="55" y="80" width="90" height="75" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+    <rect x="85" y="65" width="30" height="16" rx="4" stroke="#DC2626" stroke-width="4" fill="none"/>
+    <!-- Red Cross -->
+    <rect x="94" y="98" width="12" height="40" rx="3" fill="#DC2626"/>
+    <rect x="80" y="112" width="40" height="12" rx="3" fill="#DC2626"/>
+  </svg>

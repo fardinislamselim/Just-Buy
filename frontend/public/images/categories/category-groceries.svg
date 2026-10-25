@@ -1,0 +1,12 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" rx="12" fill="#F5F6F8"/>
+    <!-- Paper Bag -->
+    <path d="M65 80 L135 80 L128 165 H72 Z" fill="#D97706"/>
+    <!-- Bag Handle -->
+    <path d="M85 80 C85 62 115 62 115 80" stroke="#B45309" stroke-width="4" fill="none"/>
+    <!-- Baguette & Greens Peeking out -->
+    <path d="M78 85 L72 45 C72 40 85 40 85 45 L86 85" fill="#FDE68A" stroke="#D97706" stroke-width="2"/>
+    <circle cx="112" cy="72" r="16" fill="#16A34A"/>
+    <circle cx="125" cy="78" r="12" fill="#EF4444"/>
+    <circle cx="98" cy="78" r="10" fill="#EA580C"/>
+  </svg>
