@@ -40,7 +40,7 @@ export function ProductPagination({
 
     // Dynamic window centered around currentPage
     let start = Math.max(1, currentPage - 4);
-    let end = Math.min(totalPages, start + maxVisible - 1);
+    const end = Math.min(totalPages, start + maxVisible - 1);
 
     if (end - start + 1 < maxVisible) {
       start = Math.max(1, end - maxVisible + 1);
@@ -74,7 +74,7 @@ export function ProductPagination({
             "text-xs sm:text-sm font-medium px-2 py-1 transition-colors select-none",
             currentPage <= 1
               ? "text-neutral-300 cursor-not-allowed"
-              : "text-neutral-700 hover:text-[#FF5A0A] cursor-pointer",
+              : "text-neutral-700 hover:text-brand-orange cursor-pointer",
           )}
         >
           prev
@@ -102,8 +102,8 @@ export function ProductPagination({
               className={cn(
                 "w-7 h-7 sm:w-8 sm:h-8 rounded-sm text-xs sm:text-sm font-medium transition-all select-none flex items-center justify-center cursor-pointer",
                 isActive
-                  ? "bg-[#FF5A0A] text-white shadow-2xs font-semibold"
-                  : "text-neutral-600 hover:text-[#FF5A0A] hover:bg-neutral-100",
+                  ? "bg-brand-orange text-white shadow-2xs font-semibold"
+                  : "text-neutral-600 hover:text-brand-orange hover:bg-neutral-100",
               )}
               aria-current={isActive ? "page" : undefined}
             >
@@ -121,7 +121,7 @@ export function ProductPagination({
             "text-xs sm:text-sm font-medium px-2 py-1 transition-colors select-none",
             currentPage >= totalPages
               ? "text-neutral-300 cursor-not-allowed"
-              : "text-neutral-700 hover:text-[#FF5A0A] cursor-pointer",
+              : "text-neutral-700 hover:text-brand-orange cursor-pointer",
           )}
         >
           next

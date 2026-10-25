@@ -62,7 +62,7 @@ export function ExploreProducts({
       <div className="mt-12 sm:mt-14 flex items-center justify-center">
         <Link
           href="/products"
-          className="inline-flex items-center justify-center bg-[#FF5A0A] hover:bg-[#e04e08] text-white font-medium text-sm sm:text-base px-10 py-3.5 rounded-md transition-all shadow-xs active:scale-95"
+          className="inline-flex items-center justify-center bg-brand-orange hover:bg-[#e04e08] text-white font-medium text-sm sm:text-base px-10 py-3.5 rounded-md transition-all shadow-xs active:scale-95"
         >
           View All Products
         </Link>

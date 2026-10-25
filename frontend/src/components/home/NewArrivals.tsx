@@ -27,7 +27,7 @@ export function NewArrivals({
   const viewAllButton = (
     <Link
       href="/products"
-      className="inline-flex items-center justify-center bg-[#FF5A0A] hover:bg-[#e04e08] text-white font-medium text-xs sm:text-sm px-6 sm:px-8 py-2.5 rounded-md transition-colors shadow-xs active:scale-95"
+      className="inline-flex items-center justify-center bg-brand-orange hover:bg-[#e04e08] text-white font-medium text-xs sm:text-sm px-6 sm:px-8 py-2.5 rounded-md transition-colors shadow-xs active:scale-95"
     >
       View All
     </Link>

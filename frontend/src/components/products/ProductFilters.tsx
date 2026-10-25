@@ -62,13 +62,13 @@ export function ProductFilters({
   return (
     <aside
       className={cn(
-        "w-full md:w-64 lg:w-72 flex-shrink-0 flex flex-col space-y-4",
+        "w-full md:w-64 lg:w-72 shrink-0 flex flex-col space-y-4",
         className,
       )}
       aria-label="Product Search Filters"
     >
       {/* Filters Title Banner (Orange Background Matching Mockup) */}
-      <div className="bg-[#FF5A0A] text-white px-4 py-2.5 rounded-md flex items-center justify-between shadow-2xs">
+      <div className="bg-brand-orange text-white px-4 py-2.5 rounded-md flex items-center justify-between shadow-2xs">
         <h2 className="text-base font-bold tracking-wide">Filters</h2>
         {hasActiveFilters && (
           <button
@@ -87,7 +87,7 @@ export function ProductFilters({
         <button
           type="button"
           onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-          className="w-full flex items-center justify-between text-left py-2 font-semibold text-neutral-900 hover:text-[#FF5A0A] transition-colors"
+          className="w-full flex items-center justify-between text-left py-2 font-semibold text-neutral-900 hover:text-brand-orange transition-colors"
           aria-expanded={isCategoryOpen}
         >
           <span className="text-sm sm:text-base">Category</span>
@@ -112,9 +112,9 @@ export function ProductFilters({
                   {/* Custom Round Radio / Checkbox Indicator */}
                   <span
                     className={cn(
-                      "w-4 h-4 rounded-full border flex items-center justify-center transition-all flex-shrink-0",
+                      "w-4 h-4 rounded-full border flex items-center justify-center transition-all shrink-0",
                       isSelected
-                        ? "border-[#FF5A0A] bg-[#FF5A0A]"
+                        ? "border-brand-orange bg-brand-orange"
                         : "border-neutral-300 bg-white group-hover:border-neutral-400",
                     )}
                   >
@@ -126,7 +126,7 @@ export function ProductFilters({
                     className={cn(
                       "text-xs sm:text-sm transition-colors",
                       isSelected
-                        ? "text-[#FF5A0A] font-semibold"
+                        ? "text-brand-orange font-semibold"
                         : "text-neutral-700 group-hover:text-neutral-900",
                     )}
                   >
@@ -144,7 +144,7 @@ export function ProductFilters({
         <button
           type="button"
           onClick={() => setIsPriceOpen(!isPriceOpen)}
-          className="w-full flex items-center justify-between text-left py-2 font-semibold text-neutral-900 hover:text-[#FF5A0A] transition-colors"
+          className="w-full flex items-center justify-between text-left py-2 font-semibold text-neutral-900 hover:text-brand-orange transition-colors"
           aria-expanded={isPriceOpen}
         >
           <span className="text-sm sm:text-base">Price</span>
@@ -164,9 +164,9 @@ export function ProductFilters({
             >
               <span
                 className={cn(
-                  "w-4 h-4 rounded-full border flex items-center justify-center transition-all flex-shrink-0",
+                  "w-4 h-4 rounded-full border flex items-center justify-center transition-all shrink-0",
                   selectedPriceTier === "under25"
-                    ? "border-[#FF5A0A] bg-[#FF5A0A]"
+                    ? "border-brand-orange bg-brand-orange"
                     : "border-neutral-300 bg-white group-hover:border-neutral-400",
                 )}
               >
@@ -178,7 +178,7 @@ export function ProductFilters({
                 className={cn(
                   "text-xs sm:text-sm transition-colors",
                   selectedPriceTier === "under25"
-                    ? "text-[#FF5A0A] font-semibold"
+                    ? "text-brand-orange font-semibold"
                     : "text-neutral-700 group-hover:text-neutral-900",
                 )}
               >
@@ -193,9 +193,9 @@ export function ProductFilters({
             >
               <span
                 className={cn(
-                  "w-4 h-4 rounded-full border flex items-center justify-center transition-all flex-shrink-0",
+                  "w-4 h-4 rounded-full border flex items-center justify-center transition-all shrink-0",
                   selectedPriceTier === "midrange"
-                    ? "border-[#FF5A0A] bg-[#FF5A0A]"
+                    ? "border-brand-orange bg-brand-orange"
                     : "border-neutral-300 bg-white group-hover:border-neutral-400",
                 )}
               >
@@ -207,7 +207,7 @@ export function ProductFilters({
                 className={cn(
                   "text-xs sm:text-sm transition-colors",
                   selectedPriceTier === "midrange"
-                    ? "text-[#FF5A0A] font-semibold"
+                    ? "text-brand-orange font-semibold"
                     : "text-neutral-700 group-hover:text-neutral-900",
                 )}
               >
@@ -222,9 +222,9 @@ export function ProductFilters({
             >
               <span
                 className={cn(
-                  "w-4 h-4 rounded-full border flex items-center justify-center transition-all flex-shrink-0",
+                  "w-4 h-4 rounded-full border flex items-center justify-center transition-all shrink-0",
                   selectedPriceTier === "highend"
-                    ? "border-[#FF5A0A] bg-[#FF5A0A]"
+                    ? "border-brand-orange bg-brand-orange"
                     : "border-neutral-300 bg-white group-hover:border-neutral-400",
                 )}
               >
@@ -236,7 +236,7 @@ export function ProductFilters({
                 className={cn(
                   "text-xs sm:text-sm transition-colors",
                   selectedPriceTier === "highend"
-                    ? "text-[#FF5A0A] font-semibold"
+                    ? "text-brand-orange font-semibold"
                     : "text-neutral-700 group-hover:text-neutral-900",
                 )}
               >
@@ -254,7 +254,7 @@ export function ProductFilters({
                   value={customBudget}
                   onChange={(e) => onCustomBudgetChange(e.target.value)}
                   placeholder="Enter budget"
-                  className="w-full pl-3 pr-8 py-2 text-xs sm:text-sm bg-white border border-neutral-300 rounded-md placeholder:text-neutral-400 text-neutral-800 focus:outline-none focus:border-[#FF5A0A] focus:ring-1 focus:ring-[#FF5A0A]/30 transition-all"
+                  className="w-full pl-3 pr-8 py-2 text-xs sm:text-sm bg-white border border-neutral-300 rounded-md placeholder:text-neutral-400 text-neutral-800 focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange/30 transition-all"
                 />
                 <span className="absolute right-3 text-neutral-500 font-medium text-sm pointer-events-none">
                   $
@@ -270,7 +270,7 @@ export function ProductFilters({
         <button
           type="button"
           onClick={onResetFilters}
-          className="w-full py-2 px-3 text-xs sm:text-sm text-[#FF5A0A] bg-orange-50/80 hover:bg-orange-100/80 rounded-md font-medium transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+          className="w-full py-2 px-3 text-xs sm:text-sm text-brand-orange bg-orange-50/80 hover:bg-orange-100/80 rounded-md font-medium transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5" /> Reset All Filters
         </button>

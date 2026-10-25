@@ -64,9 +64,9 @@ export function ProductCard({
           className={cn(
             "w-3.5 h-3.5 sm:w-4 sm:h-4",
             isFilled
-              ? "fill-[#FFA915] text-[#FFA915]"
+              ? "fill-brand-secondary text-brand-secondary"
               : isHalf
-              ? "fill-[#FFA915]/60 text-[#FFA915]"
+              ? "fill-brand-secondary/60 text-brand-secondary"
               : "fill-neutral-200 text-neutral-300",
           )}
         />
@@ -82,7 +82,7 @@ export function ProductCard({
       )}
     >
       {/* Top Image Container */}
-      <div className="relative aspect-square w-full rounded-md bg-[#F5F6F8] flex items-center justify-center p-4 sm:p-6 overflow-hidden">
+      <div className="relative aspect-square w-full rounded-md bg-brand-bg flex items-center justify-center p-4 sm:p-6 overflow-hidden">
         {/* Optional "NEW" or Discount Badge (Top Left) */}
         {product.isNew && (
           <span className="absolute top-2.5 left-2.5 z-10 bg-[#00D084] text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-sm shadow-2xs">
@@ -101,8 +101,8 @@ export function ProductCard({
             className={cn(
               "w-4 h-4 transition-colors",
               isFavorited
-                ? "fill-[#FF5A0A] text-[#FF5A0A]"
-                : "text-neutral-600 hover:text-[#FF5A0A]",
+                ? "fill-brand-orange text-brand-orange"
+                : "text-neutral-600 hover:text-brand-orange",
             )}
           />
         </button>
@@ -141,7 +141,7 @@ export function ProductCard({
               "w-full py-2.5 px-3 text-xs sm:text-sm font-semibold text-white flex items-center justify-center gap-1.5 transition-colors cursor-pointer",
               isAdded
                 ? "bg-emerald-600"
-                : "bg-[#FF5A0A] hover:bg-[#e04e08]",
+                : "bg-brand-orange hover:bg-[#e04e08]",
             )}
           >
             {isAdded ? (
@@ -162,14 +162,14 @@ export function ProductCard({
         {/* Product Name */}
         <h3
           title={product.name}
-          className="text-sm sm:text-base font-semibold text-neutral-900 truncate group-hover:text-[#FF5A0A] transition-colors"
+          className="text-sm sm:text-base font-semibold text-neutral-900 truncate group-hover:text-brand-orange transition-colors"
         >
           {product.name}
         </h3>
 
         {/* Price */}
         <div className="flex items-center space-x-2">
-          <span className="text-sm sm:text-base font-semibold text-[#FF5A0A]">
+          <span className="text-sm sm:text-base font-semibold text-brand-orange">
             ${product.price}
           </span>
           {product.originalPrice && (

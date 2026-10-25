@@ -54,7 +54,7 @@ export function BrowseByCategory() {
             <Link
               key={category._id || category.id || category.name}
               href={`/products?category=${encodeURIComponent(category.name)}`}
-              className="group flex-shrink-0 w-[140px] sm:w-[175px] lg:w-[195px] flex flex-col items-center justify-center p-4 sm:p-6 bg-[#F5F6F8] rounded-lg border border-neutral-200/50 hover:border-[#FF5A0A] hover:bg-white hover:shadow-md transition-all duration-200"
+              className="group shrink-0 w-35 sm:w-43.75 lg:w-48.75 flex flex-col items-center justify-center p-4 sm:p-6 bg-brand-bg rounded-lg border border-neutral-200/50 hover:border-brand-orange hover:bg-white hover:shadow-md transition-all duration-200"
             >
               {/* Category Image */}
               <div className="relative w-20 h-20 sm:w-24 sm:h-24 mb-3 sm:mb-4 flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
@@ -68,7 +68,7 @@ export function BrowseByCategory() {
               </div>
 
               {/* Category Title */}
-              <span className="text-xs sm:text-sm font-medium text-neutral-800 text-center group-hover:text-[#FF5A0A] transition-colors line-clamp-1">
+              <span className="text-xs sm:text-sm font-medium text-neutral-800 text-center group-hover:text-brand-orange transition-colors line-clamp-1">
                 {category.name}
               </span>
             </Link>

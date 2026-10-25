@@ -25,7 +25,7 @@ export function CategorySidebar({
 
   return (
     <aside
-      className="hidden md:flex flex-col w-56 lg:w-64 pt-6 pb-6 pr-6 border-r border-neutral-200/80 flex-shrink-0"
+      className="hidden md:flex flex-col w-56 lg:w-64 pt-6 pb-6 pr-6 border-r border-neutral-200/80 shrink-0"
       aria-label="Product Categories Sidebar"
     >
       <nav className="flex flex-col space-y-3">
@@ -46,15 +46,15 @@ export function CategorySidebar({
                 }}
                 className={`group flex items-center justify-between text-sm transition-colors py-1 px-1 rounded-sm ${
                   isActive
-                    ? "text-[#FF5A0A] font-semibold"
-                    : "text-neutral-800 hover:text-[#FF5A0A]"
+                    ? "text-brand-orange font-semibold"
+                    : "text-neutral-800 hover:text-brand-orange"
                 }`}
               >
                 <span className="capitalize transition-transform group-hover:translate-x-1 duration-150">
                   {cat.name}
                 </span>
                 {hasSubmenu && (
-                  <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-[#FF5A0A] transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-brand-orange transition-colors" />
                 )}
               </Link>
             );

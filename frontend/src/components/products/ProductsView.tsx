@@ -12,7 +12,7 @@ import { Search, SlidersHorizontal, X, ArrowUpDown } from "lucide-react";
 import { ProductCard } from "@/components/products/ProductCard";
 import { ProductFilters } from "@/components/products/ProductFilters";
 import { ProductPagination } from "@/components/products/ProductPagination";
-import { useProducts, type PriceTier } from "@/hooks/use-products";
+import { useProducts, type PriceTier, type SortOption } from "@/hooks/use-products";
 import type { Product } from "@/types";
 
 function ProductsViewContent() {
@@ -33,7 +33,7 @@ function ProductsViewContent() {
   const [selectedPriceTier, setSelectedPriceTier] = useState<PriceTier>(initialPriceTier);
   const [customBudget, setCustomBudget] = useState<string>(initialBudget);
   const [currentPage, setCurrentPage] = useState<number>(initialPage);
-  const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc" | "rating-desc">("default");
+  const [sortBy, setSortBy] = useState<SortOption>("default");
 
   // Mobile filter drawer toggle
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
@@ -46,6 +46,7 @@ function ProductsViewContent() {
     try {
       const savedWishlist = localStorage.getItem("jusbuy_wishlist");
       if (savedWishlist) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setWishlistIds(new Set(JSON.parse(savedWishlist)));
       }
     } catch {
@@ -61,6 +62,7 @@ function ProductsViewContent() {
     const urlPage = parseInt(searchParams.get("page") || "1", 10);
     const urlBudget = searchParams.get("budget") || "";
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelectedCategory(urlCategory);
     setSearchQuery(urlSearch);
     setSelectedPriceTier(urlPriceTier);
@@ -192,8 +194,8 @@ function ProductsViewContent() {
         {/* Left: Orange Badge "This Month" & Main Title "New Arrival" */}
         <div className="flex flex-col space-y-3">
           <div className="flex items-center space-x-3.5">
-            <span className="w-3.5 h-7 sm:w-4 sm:h-8 bg-[#FF5A0A] rounded-xs inline-block flex-shrink-0" />
-            <span className="text-xs sm:text-sm font-semibold text-[#FF5A0A]">
+            <span className="w-3.5 h-7 sm:w-4 sm:h-8 bg-brand-orange rounded-xs inline-block shrink-0" />
+            <span className="text-xs sm:text-sm font-semibold text-brand-orange">
               This Month
             </span>
           </div>
@@ -215,12 +217,12 @@ function ProductsViewContent() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="What are you looking for?"
-              className="w-full pl-4 pr-11 py-2.5 text-xs sm:text-sm bg-[#F5F6F8] text-neutral-800 placeholder:text-neutral-400 rounded-md border border-transparent focus:outline-none focus:border-[#FF5A0A]/40 focus:bg-white transition-all shadow-2xs"
+              className="w-full pl-4 pr-11 py-2.5 text-xs sm:text-sm bg-neutral-100 text-neutral-800 placeholder:text-neutral-400 rounded-md border border-transparent focus:outline-none focus:border-brand-orange/40 focus:bg-white transition-all shadow-2xs"
             />
             <button
               type="submit"
               aria-label="Submit Search"
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-600 hover:text-[#FF5A0A] transition-colors"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-600 hover:text-brand-orange transition-colors"
             >
               <Search className="w-4 h-4" />
             </button>
@@ -272,18 +274,17 @@ function ProductsViewContent() {
               onSelectCategory={(cat) => {
                 handleCategoryChange(cat);
                 setIsMobileFilterOpen(false);
-              }}
-              selectedPriceTier={(tier) => {
+              } }
+              onSelectPriceTier={(tier) => {
                 handlePriceTierChange(tier);
                 setIsMobileFilterOpen(false);
-              }}
+              } }
               customBudget={customBudget}
               onCustomBudgetChange={handleCustomBudgetChange}
               onResetFilters={() => {
                 handleResetFilters();
                 setIsMobileFilterOpen(false);
-              }}
-            />
+              } } selectedPriceTier={"all"}            />
           </div>
         )}
 
@@ -297,7 +298,7 @@ function ProductsViewContent() {
               )}
 
               {selectedCategory && selectedCategory !== "all" && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-100/70 text-[#FF5A0A] font-medium">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-100/70 text-brand-orange font-medium">
                   Category: {selectedCategory}
                   <button
                     type="button"
@@ -311,7 +312,7 @@ function ProductsViewContent() {
               )}
 
               {selectedPriceTier !== "all" && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-100/70 text-[#FF5A0A] font-medium">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-100/70 text-brand-orange font-medium">
                   Price: {selectedPriceTier === "under25"
                     ? "Under $25"
                     : selectedPriceTier === "midrange"
@@ -329,7 +330,7 @@ function ProductsViewContent() {
               )}
 
               {customBudget && customBudget.trim() !== "" && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-100/70 text-[#FF5A0A] font-medium">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-100/70 text-brand-orange font-medium">
                   Budget: Up to ${customBudget}
                   <button
                     type="button"
@@ -343,7 +344,7 @@ function ProductsViewContent() {
               )}
 
               {searchQuery && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-100/70 text-[#FF5A0A] font-medium">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-100/70 text-brand-orange font-medium">
                   Search: &ldquo;{searchQuery}&rdquo;
                   <button
                     type="button"
@@ -369,8 +370,8 @@ function ProductsViewContent() {
               <select
                 id="sort-select"
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-transparent border-0 text-neutral-800 font-medium focus:ring-0 cursor-pointer hover:text-[#FF5A0A] text-xs py-1 pr-2"
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="bg-transparent border-0 text-neutral-800 font-medium focus:ring-0 cursor-pointer hover:text-brand-orange text-xs py-1 pr-2"
               >
                 <option value="default">Default</option>
                 <option value="price-asc">Price: Low to High</option>
@@ -402,7 +403,7 @@ function ProductsViewContent() {
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="px-5 py-2 text-xs font-semibold text-white bg-[#FF5A0A] hover:bg-[#e04e08] rounded-md transition-colors"
+                className="px-5 py-2 text-xs font-semibold text-white bg-brand-orange hover:bg-[#e04e08] rounded-md transition-colors"
               >
                 Reset All Filters
               </button>
@@ -446,7 +447,7 @@ export function ProductsView() {
     <Suspense
       fallback={
         <div className="py-24 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF5A0A]" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-orange" />
         </div>
       }
     >

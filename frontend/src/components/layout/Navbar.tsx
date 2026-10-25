@@ -61,14 +61,13 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
   };
 
   const isHome = pathname === "/";
-  const isProducts = pathname.startsWith("/products") || pathname.startsWith("/product");
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-neutral-200/80 transition-shadow">
       <Container>
         <div className="flex items-center justify-between h-20 sm:h-22">
           {/* Brand Logo */}
-          <div className="flex items-center flex-shrink-0">
+          <div className="flex items-center shrink-0">
             <Link href="/" className="inline-flex items-center gap-2" aria-label="JusBuy Home">
               <Image
                 src="/logo.svg"
@@ -88,21 +87,21 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
               className={cn(
                 "transition-colors",
                 isHome
-                  ? "text-neutral-900 font-medium relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-[#FF5A0A]"
-                  : "text-neutral-700 hover:text-[#FF5A0A]",
+                  ? "text-neutral-900 font-medium relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-0.5 after:bg-brand-orange"
+                  : "text-neutral-700 hover:text-brand-orange",
               )}
             >
               Home
             </Link>
             <Link
               href="/contact"
-              className="hover:text-[#FF5A0A] transition-colors"
+              className="hover:text-brand-orange transition-colors"
             >
               Contact
             </Link>
             <Link
               href="/about"
-              className="hover:text-[#FF5A0A] transition-colors"
+              className="hover:text-brand-orange transition-colors"
             >
               About
             </Link>
@@ -120,12 +119,12 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="What are you looking for?"
-                className="w-56 lg:w-64 pl-4 pr-10 py-2 text-xs sm:text-sm bg-[#F5F6F8] text-neutral-800 placeholder:text-neutral-400 rounded-md border border-transparent focus:outline-none focus:border-[#FF5A0A]/40 focus:bg-white transition-all"
+                className="w-56 lg:w-64 pl-4 pr-10 py-2 text-xs sm:text-sm bg-brand-bg text-neutral-800 placeholder:text-neutral-400 rounded-md border border-transparent focus:outline-none focus:border-brand-orange/40 focus:bg-white transition-all"
               />
               <button
                 type="submit"
                 aria-label="Search"
-                className="absolute right-3 text-neutral-600 hover:text-[#FF5A0A] transition-colors"
+                className="absolute right-3 text-neutral-600 hover:text-brand-orange transition-colors"
               >
                 <Search className="w-4 h-4" />
               </button>
@@ -135,11 +134,11 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
             <Link
               href="#wishlist"
               aria-label="Wishlist"
-              className="relative p-2 text-neutral-800 hover:text-[#FF5A0A] transition-colors rounded-full hover:bg-neutral-100"
+              className="relative p-2 text-neutral-800 hover:text-brand-orange transition-colors rounded-full hover:bg-neutral-100"
             >
               <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
               {effectiveWishlistCount > 0 && (
-                <span className="absolute top-1 right-1 bg-[#FF5A0A] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                <span className="absolute top-1 right-1 bg-brand-orange text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
                   {effectiveWishlistCount}
                 </span>
               )}
@@ -149,11 +148,11 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
             <Link
               href="#cart"
               aria-label="Shopping Cart"
-              className="relative p-2 text-neutral-800 hover:text-[#FF5A0A] transition-colors rounded-full hover:bg-neutral-100"
+              className="relative p-2 text-neutral-800 hover:text-brand-orange transition-colors rounded-full hover:bg-neutral-100"
             >
               <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
               {effectiveCartCount > 0 && (
-                <span className="absolute top-1 right-1 bg-[#FF5A0A] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                <span className="absolute top-1 right-1 bg-brand-orange text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                   {effectiveCartCount}
                 </span>
               )}
@@ -163,7 +162,7 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
             <Link
               href="/login"
               aria-label="Account Login"
-              className="p-2 text-neutral-800 hover:text-[#FF5A0A] transition-colors rounded-full hover:bg-neutral-100"
+              className="p-2 text-neutral-800 hover:text-brand-orange transition-colors rounded-full hover:bg-neutral-100"
             >
               <User className="w-5 h-5 sm:w-6 sm:h-6" />
             </Link>
@@ -172,7 +171,7 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-neutral-800 hover:text-[#FF5A0A] focus:outline-none"
+              className="md:hidden p-2 text-neutral-800 hover:text-brand-orange focus:outline-none"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? (
@@ -192,7 +191,7 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="What are you looking for?"
-              className="w-full pl-4 pr-10 py-2 text-xs bg-[#F5F6F8] text-neutral-800 placeholder:text-neutral-400 rounded-md border border-neutral-200 focus:outline-none focus:border-[#FF5A0A]"
+              className="w-full pl-4 pr-10 py-2 text-xs bg-brand-bg text-neutral-800 placeholder:text-neutral-400 rounded-md border border-neutral-200 focus:outline-none focus:border-brand-orange"
             />
             <button
               type="submit"
@@ -210,21 +209,21 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 text-base font-semibold text-[#FF5A0A] bg-orange-50/60 rounded-md"
+              className="px-3 py-2 text-base font-semibold text-brand-orange bg-orange-50/60 rounded-md"
             >
               Home
             </Link>
             <Link
               href="/contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 text-base font-medium text-neutral-700 hover:text-[#FF5A0A] hover:bg-neutral-50 rounded-md transition-colors"
+              className="px-3 py-2 text-base font-medium text-neutral-700 hover:text-brand-orange hover:bg-neutral-50 rounded-md transition-colors"
             >
               Contact
             </Link>
             <Link
               href="/about"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 text-base font-medium text-neutral-700 hover:text-[#FF5A0A] hover:bg-neutral-50 rounded-md transition-colors"
+              className="px-3 py-2 text-base font-medium text-neutral-700 hover:text-brand-orange hover:bg-neutral-50 rounded-md transition-colors"
             >
               About
             </Link>
@@ -233,7 +232,7 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }: NavbarProps) {
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-sm font-semibold text-[#FF5A0A] hover:underline"
+                className="text-sm font-semibold text-brand-orange hover:underline"
               >
                 Sign In / Register
               </Link>

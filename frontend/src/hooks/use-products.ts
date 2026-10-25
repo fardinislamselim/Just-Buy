@@ -13,6 +13,7 @@ import { catalogProducts } from "@/data/products";
 import type { Product } from "@/types";
 
 export type PriceTier = "all" | "under25" | "midrange" | "highend";
+export type SortOption = "default" | "price-asc" | "price-desc" | "rating-desc";
 
 export interface UseProductsOptions {
   category?: string;
@@ -21,7 +22,7 @@ export interface UseProductsOptions {
   customBudget?: number | null;
   page?: number;
   limit?: number;
-  sortBy?: "default" | "price-asc" | "price-desc" | "rating-desc";
+  sortBy?: SortOption;
 }
 
 /**
